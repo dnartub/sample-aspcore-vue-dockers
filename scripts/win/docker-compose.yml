@@ -1,0 +1,29 @@
+version: '3.4'
+
+services:
+  webhost:
+    container_name: astral-webhost
+    image: compose/astral-sample3:1.0
+    build:
+      context: .
+      dockerfile: app-webhost-compose.Dockerfile
+      cache_from: ['local/astral-sample3:1.0']
+    ports:
+      - "127.0.0.1:7700:7700"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - ASPNETCORE_URLS=http://+:7700
+  
+  front:
+    container_name: astral-proxy
+    image: compose/astral-sample3-proxy-front
+    build:
+      context: .
+      dockerfile: app-proxy-front-compose.Dockerfile
+      cache_from: ['local/astral-sample3-proxy-front']
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf
+    ports:
+      - "80:80"
+    links:
+      - webhost
