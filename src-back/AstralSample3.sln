@@ -15,6 +15,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HttpRequest.Core", "common\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Commands", "common\MsSqlDatabase.Commands\Commands.csproj", "{D970EC32-B887-4D65-A817-36A22CC62B72}"
 EndProject
+Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "Docker.Orchestration.Dev\docker-compose.dcproj", "{6228B19D-3D1D-4DC6-BC93-4928BC30B351}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Docker.Orchestration.Dev", "Docker.Orchestration.Dev", "{A79A2901-9F5E-407B-BA19-A8242B732537}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -41,6 +45,10 @@ Global
 		{D970EC32-B887-4D65-A817-36A22CC62B72}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D970EC32-B887-4D65-A817-36A22CC62B72}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D970EC32-B887-4D65-A817-36A22CC62B72}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6228B19D-3D1D-4DC6-BC93-4928BC30B351}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6228B19D-3D1D-4DC6-BC93-4928BC30B351}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6228B19D-3D1D-4DC6-BC93-4928BC30B351}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6228B19D-3D1D-4DC6-BC93-4928BC30B351}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -50,6 +58,7 @@ Global
 		{0EAAE8E1-3AC6-4637-A0B3-41A5051812CC} = {14419A35-3CE5-4E49-97C6-8DDE4F6E06DB}
 		{DC1160AF-C4BE-43F5-A366-DB07520CF23A} = {14419A35-3CE5-4E49-97C6-8DDE4F6E06DB}
 		{D970EC32-B887-4D65-A817-36A22CC62B72} = {14419A35-3CE5-4E49-97C6-8DDE4F6E06DB}
+		{6228B19D-3D1D-4DC6-BC93-4928BC30B351} = {A79A2901-9F5E-407B-BA19-A8242B732537}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {F1A4A339-2D11-45DF-9CF8-F4CB59D1B270}
