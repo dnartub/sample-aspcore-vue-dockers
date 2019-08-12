@@ -4,13 +4,14 @@ using System.Text;
 using MsSqlDatabase.Context;
 using MsSqlDatabase.Entities;
 using Microsoft.Extensions.DependencyInjection;
+using AutoMapper;
 
-namespace MsSqlDatabase.Commands.Source
+namespace Commands.Source
 {
     /// <summary>
     /// Получение источника по id
     /// </summary>
-    public class GetSourceFromDb : IGetCommand<Entities.Source>
+    public class GetSourceFromDb : IGetCommand<Models.Source>
     {
         Guid _id;
 
@@ -19,11 +20,13 @@ namespace MsSqlDatabase.Commands.Source
             _id = id;
         }
 
-        public Entities.Source Get(IServiceProvider provider)
+        public Models.Source Get(IServiceProvider provider)
         {
             var context = provider.GetService<SvContext>();
+            var mapper = provider.GetService<IMapper>();
 
-            return context.Sources.Find(_id);
+            var dal = context.Sources.Find(_id);
+            return mapper.Map<Models.Source>(dal);
         }
     }
 }

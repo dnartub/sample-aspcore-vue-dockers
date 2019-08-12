@@ -13,12 +13,15 @@ export default {
         }
     },
 
-    mounted: function () {
+    async created() {
         // загрузка источников при мантировании компонента
-        this.loadSources()
-            .catch(e => console.error(e))
+        try {
+            await this.loadSources();
             // установка текущего истоника -> реактивное слежение в SourceResult.watch -> загрузка из источника
-            .then(() => this.setCurrentSource(this.sources[1]));
+            this.setCurrentSource(this.sources[1]);
+        } catch (e) {
+            console.log(e);
+        }
     },
 
     watch: {
@@ -29,13 +32,14 @@ export default {
         // actions из store
         ...mapActions("app", [
             "loadSources",
+            "loadVacancies",
             "setCurrentSource"
         ]),
         // при клике на источник в списке
         handleSourceClick(e:any) {
             var source = this.sources.find((x: Source) => x.id == e.key);
             this.setCurrentSource(source); // store-action
-        }
+        },
     },
 
     computed: {

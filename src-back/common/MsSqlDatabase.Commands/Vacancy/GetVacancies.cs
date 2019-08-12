@@ -1,11 +1,9 @@
-﻿using MsSqlDatabase.Commands;
-using Parsers.Source.Interfaces;
+﻿using Parsers.Source.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Text;
 using Microsoft.Extensions.DependencyInjection;
-using MsSqlDatabase.Commands.Source;
 using System.Linq;
 
 namespace Commands.Vacancy

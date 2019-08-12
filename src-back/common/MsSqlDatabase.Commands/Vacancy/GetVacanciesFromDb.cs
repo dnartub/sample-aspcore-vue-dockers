@@ -1,5 +1,4 @@
-﻿using MsSqlDatabase.Commands;
-using Parsers.Source.Interfaces;
+﻿using Parsers.Source.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -26,6 +25,7 @@ namespace Commands.Vacancy
         public List<ISourceVacancy> Get(IServiceProvider provider)
         {
             var context = provider.GetService<SvContext>();
+            var mapper = provider.GetService<IMapper>();
 
             var dals =  context.Vacancies
                 .Where(x=>x.SourceId == _sourceId)
@@ -33,7 +33,7 @@ namespace Commands.Vacancy
                 .Take(50)
                 .ToList();
 
-            var result = Mapper.Map<List<SourceVacancy>>(dals)
+            var result = mapper.Map<List<SourceVacancy>>(dals)
                 .Select(x=> x as ISourceVacancy)
                 .ToList();
 

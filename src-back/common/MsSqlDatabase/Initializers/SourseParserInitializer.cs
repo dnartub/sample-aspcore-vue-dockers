@@ -32,7 +32,7 @@ namespace MsSqlDatabase.Initializers
 
             var source = new Source()
             {
-                Id = Guid.NewGuid(),
+                Id = Guid.Parse("e6c17a32-4e91-4b18-815b-5a33268834e4"),
                 SourceParser = Enums.SourceParsers.RabotaYandex,
                 Url = "https://rabota.yandex.ru/search?job_industry=275"
             };
@@ -41,7 +41,7 @@ namespace MsSqlDatabase.Initializers
 
             var source2 = new Source()
             {
-                Id = Guid.NewGuid(),
+                Id = Guid.Parse("55619064-c2ac-4d6d-bf18-fa3107196515"),
                 SourceParser = Enums.SourceParsers.RabotaRu,
                 Url = "https://kaluga.rabota.ru/vacancy"
             };

@@ -151,6 +151,7 @@ namespace Web.Host.Service.Infrastructure.DI
             var mappingConfig = new MapperConfiguration(config =>
             {
                 config.AddProfile(new VacancyProfile());
+                config.AddProfile(new SourceProfile());
             });
 
             IMapper mapper = mappingConfig.CreateMapper();

@@ -7,6 +7,9 @@ using Web.Host.Service.Controllers.Base;
 using Microsoft.Extensions.DependencyInjection;
 using System.Linq;
 using Serilog;
+using Microsoft.EntityFrameworkCore;
+using System.Threading.Tasks;
+using Commands.Source;
 
 namespace Web.Host.Service.Controllers.Api.Source
 {
@@ -14,7 +17,7 @@ namespace Web.Host.Service.Controllers.Api.Source
     /// Api по работе с источниками
     /// </summary>
     [Route("api/[controller]")]
-    public class SourceController:ServiceController
+    public class SourceController : ServiceController
     {
         private IServiceProvider Provider { get; set; }
 
@@ -36,9 +39,8 @@ namespace Web.Host.Service.Controllers.Api.Source
         {
             try
             {
-                var result = Provider.GetService<SvContext>()
-                    .Sources
-                    .ToList();
+                var result = new GetAllSourcesFromDb()
+                    .Get(Provider);
 
                 return base.SuccessResult(result);
             }

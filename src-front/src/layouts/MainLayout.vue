@@ -1,4 +1,4 @@
-<template>
+﻿<template>
 	<div class="app-inner">
 		<router-view/>
 	</div>

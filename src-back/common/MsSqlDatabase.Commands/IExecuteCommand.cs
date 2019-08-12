@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace MsSqlDatabase.Commands
+namespace Commands
 {
     /// <summary>
     /// Команды изменения данных

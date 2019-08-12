@@ -1,5 +1,4 @@
-﻿using MsSqlDatabase.Commands;
-using Parsers.Source.Interfaces;
+﻿using Parsers.Source.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -8,7 +7,7 @@ using MsSqlDatabase.Context;
 using System.Linq;
 using AutoMapper;
 using Parsers.Source.Implementations.Models;
-using MsSqlDatabase.Commands.Source;
+using Commands.Source;
 
 namespace Commands.Vacancy
 {
