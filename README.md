@@ -35,7 +35,11 @@ Postgres). Приложение должно поддерживать работу как в присоединенном к
 1. Запустить проект Web.Host.Service (localhost:5000)
 2. Запустить dev-сервер фронта(в каталоге src-front) - "npm i || npm run serve" (localhost:8080)
 
-### Запуск инфраструктуры контейнеров
+### Запуск инфраструктуры контейнеров (VS-Debug)
+
+Запустите проект Docker.Orchestration.Dev/docker-compose
+
+### Запуск инфраструктуры контейнеров (Scripts)
 
 * Запустить скрипт **scripts\win\build-and-run-docker-infrastructure.bat**
 
