@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Commands
+namespace Cqrs
 {
     /// <summary>
     /// Комманды возвращающие результат
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public interface IGetCommand<T>
+    public interface IGetCommand<T>:IAnyGetCommand
     {
         /// <summary>
         /// Получение данных
@@ -18,4 +18,6 @@ namespace Commands
         /// <returns></returns>
         T Get(IServiceProvider provider);
     }
+
+    public interface IAnyGetCommand { }
 }

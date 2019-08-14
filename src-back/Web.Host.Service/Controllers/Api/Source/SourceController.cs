@@ -1,15 +1,13 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using MsSqlDatabase.Context;
 using System;
 using System.Collections.Generic;
 using System.Text;
 using Web.Host.Service.Controllers.Base;
-using Microsoft.Extensions.DependencyInjection;
 using System.Linq;
 using Serilog;
-using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
-using Commands.Source;
+using Cqrs.Interfaces;
+using Cqrs.Queries.AllSourcesFromDb;
 
 namespace Web.Host.Service.Controllers.Api.Source
 {
@@ -19,15 +17,15 @@ namespace Web.Host.Service.Controllers.Api.Source
     [Route("api/[controller]")]
     public class SourceController : ServiceController
     {
-        private IServiceProvider Provider { get; set; }
+        ICqrsService _cqrsService;
 
         /// <summary>
         /// DI - конструктор
         /// </summary>
         /// <param name="provider"></param>
-        public SourceController(IServiceProvider provider)
+        public SourceController(ICqrsService cqrsService)
         {
-            Provider = provider;
+            _cqrsService = cqrsService;
         }
 
         /// <summary>
@@ -39,8 +37,7 @@ namespace Web.Host.Service.Controllers.Api.Source
         {
             try
             {
-                var result = new GetAllSourcesFromDb()
-                    .Get(Provider);
+                var result = _cqrsService.Execute<AllSourcesFromDbQuery, List<Cqrs.Models.Source>>(new AllSourcesFromDbQuery());
 
                 return base.SuccessResult(result);
             }

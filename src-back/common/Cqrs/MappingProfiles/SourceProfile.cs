@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Commands.MappingProfiles
+namespace Cqrs.MappingProfiles
 {
     public class SourceProfile:Profile
     {

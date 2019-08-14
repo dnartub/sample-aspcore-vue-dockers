@@ -14,6 +14,7 @@ using Microsoft.AspNetCore.HttpOverrides;
 using Web.Host.Service.Infrastructure.DI;
 using MsSqlDatabase.Context;
 using MsSqlDatabase.Initializers;
+using Cqrs.Services;
 
 namespace Web.Host.Service
 {
@@ -37,6 +38,7 @@ namespace Web.Host.Service
                 .AddSourceParsers()
                 .AddWebSourceLoader()
                 .AddAutomapperConfiguration()
+                .AddCqrsServices()
                 .AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }
 

@@ -13,7 +13,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Parsers.Source", "common\Pa
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HttpRequest.Core", "common\HttpRequest.Core\HttpRequest.Core.csproj", "{DC1160AF-C4BE-43F5-A366-DB07520CF23A}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Commands", "common\MsSqlDatabase.Commands\Commands.csproj", "{D970EC32-B887-4D65-A817-36A22CC62B72}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Cqrs", "common\Cqrs\Cqrs.csproj", "{D970EC32-B887-4D65-A817-36A22CC62B72}"
 EndProject
 Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "Docker.Orchestration.Dev\docker-compose.dcproj", "{6228B19D-3D1D-4DC6-BC93-4928BC30B351}"
 EndProject

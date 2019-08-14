@@ -1,5 +1,5 @@
-﻿using Commands.Source;
-using Commands.Vacancy;
+﻿using Cqrs.Source;
+using Cqrs.Vacancy;
 using Microsoft.AspNetCore.Mvc;
 using MsSqlDatabase.Entities;
 using Parsers.Source.Implementations.SourceParsers;

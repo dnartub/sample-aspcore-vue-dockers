@@ -7,7 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 using System.Linq;
 using MsSqlDatabase.Context;
 
-namespace Commands.Vacancy
+namespace Cqrs.Vacancy
 {
     /// <summary>
     /// Добавление вакансий в БД

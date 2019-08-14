@@ -7,9 +7,9 @@ using MsSqlDatabase.Context;
 using System.Linq;
 using AutoMapper;
 using Parsers.Source.Implementations.Models;
-using Commands.Source;
+using Cqrs.Source;
 
-namespace Commands.Vacancy
+namespace Cqrs.Vacancy
 {
     /// <summary>
     /// Получение вакансий с источника

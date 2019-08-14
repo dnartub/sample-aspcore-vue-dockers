@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Commands
+namespace Cqrs
 {
     /// <summary>
     /// Команды изменения данных

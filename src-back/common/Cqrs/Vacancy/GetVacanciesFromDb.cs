@@ -8,7 +8,7 @@ using System.Linq;
 using AutoMapper;
 using Parsers.Source.Implementations.Models;
 
-namespace Commands.Vacancy
+namespace Cqrs.Vacancy
 {
     /// <summary>
     /// Получение вакансий из БД

@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Commands.Models
+namespace Cqrs.Models
 {
     public class Source
     {

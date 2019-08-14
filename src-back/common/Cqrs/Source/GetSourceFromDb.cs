@@ -6,7 +6,7 @@ using MsSqlDatabase.Entities;
 using Microsoft.Extensions.DependencyInjection;
 using AutoMapper;
 
-namespace Commands.Source
+namespace Cqrs.Source
 {
     /// <summary>
     /// Получение источника по id

@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
-using Commands.MappingProfiles;
+using Cqrs.MappingProfiles;
+using Cqrs.Services;
 using HttpRequest.Core;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
@@ -150,11 +151,13 @@ namespace Web.Host.Service.Infrastructure.DI
             // Auto Mapper Configurations
             var mappingConfig = new MapperConfiguration(config =>
             {
-                config.AddProfile(new VacancyProfile());
-                config.AddProfile(new SourceProfile());
+                config.AddMaps(new[] {
+                    typeof(CqrsMapperAssemblyLink)
+                });
             });
 
             IMapper mapper = mappingConfig.CreateMapper();
+
             services.AddSingleton(mapper);
 
             return services;

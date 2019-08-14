@@ -6,7 +6,7 @@ using System.Text;
 using Microsoft.Extensions.DependencyInjection;
 using System.Linq;
 
-namespace Commands.Vacancy
+namespace Cqrs.Vacancy
 {
     /// <summary>
     /// Получение вакансий

@@ -7,7 +7,7 @@ using System.Linq.Expressions;
 using System.Linq;
 using AutoMapper;
 
-namespace Commands.Source
+namespace Cqrs.Source
 {
     /// <summary>
     /// Поиск среди Источников в БД

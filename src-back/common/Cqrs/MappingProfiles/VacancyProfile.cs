@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Commands.MappingProfiles
+namespace Cqrs.MappingProfiles
 {
     /// <summary>
     /// Маппинг вакансии между БД и моделью данных
