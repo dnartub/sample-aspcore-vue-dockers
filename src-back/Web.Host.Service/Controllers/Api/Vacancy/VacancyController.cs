@@ -1,5 +1,9 @@
-﻿using Cqrs.Source;
-using Cqrs.Vacancy;
+﻿using Cqrs.Commands.AddVacanciesToDb;
+using Cqrs.Interfaces;
+using Cqrs.Queries.AllSourcesFromDb;
+using Cqrs.Queries.FindSourceInDb;
+using Cqrs.Queries.VacanciesFromDb;
+using Cqrs.Queries.VacanciesFromWebSource;
 using Microsoft.AspNetCore.Mvc;
 using MsSqlDatabase.Entities;
 using Parsers.Source.Implementations.SourceParsers;
@@ -8,6 +12,7 @@ using Serilog;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using Web.Host.Service.Controllers.Base;
@@ -20,15 +25,15 @@ namespace Web.Host.Service.Controllers.Api.Vacancy
     [Route("api/[controller]")]
     public class VacancyController : ServiceController
     {
-        private IWebSourceLoader WebSourceLoader { get; set; }
-        private IEnumerable<ISourceParser> Parsers { get; set; }
-        private IServiceProvider Provider { get; set; }
+        IWebSourceLoader _webSourceLoader;
+        IEnumerable<ISourceParser> _parsers;
+        ICqrsService _cqrsService;
 
-        public VacancyController(IWebSourceLoader webSourceLoader, IEnumerable<ISourceParser> parsers, IServiceProvider provider)
+        public VacancyController(IWebSourceLoader webSourceLoader, IEnumerable<ISourceParser> parsers, ICqrsService cqrsService)
         {
-            WebSourceLoader = webSourceLoader;
-            Parsers = parsers;
-            Provider = provider;
+            _webSourceLoader = webSourceLoader;
+            _parsers = parsers;
+            _cqrsService = cqrsService;
         }
 
         /// <summary>
@@ -40,9 +45,7 @@ namespace Web.Host.Service.Controllers.Api.Vacancy
         {
             try
             {
-                var result = new GetVacancies(sourceId)
-                    .Get(Provider);
-
+                var result = GetVacancies(sourceId); 
                 return base.SuccessResult(result);
             }
             catch (Exception ex)
@@ -61,8 +64,10 @@ namespace Web.Host.Service.Controllers.Api.Vacancy
         {
             try
             {
-                var source = new FindSourceInDb(x=>x.SourceParser == MsSqlDatabase.Enums.SourceParsers.RabotaRu)
-                    .Get(Provider)
+                var query = new FindSourceInDbQuery() {
+                    Predicate = x => x.SourceParser == MsSqlDatabase.Enums.SourceParsers.RabotaRu
+                };
+                var source = _cqrsService.Execute<FindSourceInDbQuery, List<Cqrs.Models.Source>>(query)
                     .FirstOrDefault();
 
                 if (source == null)
@@ -70,8 +75,7 @@ namespace Web.Host.Service.Controllers.Api.Vacancy
                     throw new Exception("Нет данных об источнике Работа.RU");
                 }
 
-                var result = new GetVacancies(source.Id)
-                    .Get(Provider);
+                var result = GetVacancies(source.Id);
 
                 return base.SuccessResult(result);
             }
@@ -79,6 +83,47 @@ namespace Web.Host.Service.Controllers.Api.Vacancy
             {
                 Log.Error(ex, "Ошибка при получении списка актуальных вакансий");
                 return base.ErrorResult($"Ошибка при получении списка актуальных вакансий: {ex.Message}");
+            }
+        }
+
+        // TODO: выделить бизнес-слой и там управлять логикой вызова команд получения из источника и добавления в БД (Step Builder)
+        private List<ISourceVacancy> GetVacancies(Guid sourceId)
+        {
+            try
+            {
+                // получаем с ресурса
+                var queryGetVacancies = new VacanciesFromWebSourceQuery()
+                {
+                    SourceId = sourceId
+                };
+
+                var result = _cqrsService.Execute<VacanciesFromWebSourceQuery, List<ISourceVacancy>>(queryGetVacancies);
+
+                // добавляем в БД
+                var commandAddVacanciesToDb = new AddVacanciesToDbCommand()
+                {
+                    SourceId = sourceId,
+                    Vacancies = result
+                };
+                _cqrsService.Execute(commandAddVacanciesToDb);
+
+                return result;
+            }
+            catch (HttpRequestException)
+            {
+                // сайт недоступен, берем из БД
+                var queryGetVacanciesFromDb = new VacanciesFromDbQuery()
+                {
+                    SourceId = sourceId
+                };
+
+                var result = _cqrsService.Execute<VacanciesFromDbQuery, List<ISourceVacancy>>(queryGetVacanciesFromDb);
+
+                return result;
+            }
+            catch (Exception)
+            {
+                throw;
             }
         }
     }
