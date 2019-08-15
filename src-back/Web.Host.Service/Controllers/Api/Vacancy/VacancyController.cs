@@ -67,7 +67,7 @@ namespace Web.Host.Service.Controllers.Api.Vacancy
                 var query = new FindSourceInDbQuery() {
                     Predicate = x => x.SourceParser == MsSqlDatabase.Enums.SourceParsers.RabotaRu
                 };
-                var source = _cqrsService.Execute<FindSourceInDbQuery, List<Cqrs.Models.Source>>(query)
+                var source = _cqrsService.Execute<List<Cqrs.Models.Source>>(query)
                     .FirstOrDefault();
 
                 if (source == null)
@@ -97,7 +97,7 @@ namespace Web.Host.Service.Controllers.Api.Vacancy
                     SourceId = sourceId
                 };
 
-                var result = _cqrsService.Execute<VacanciesFromWebSourceQuery, List<ISourceVacancy>>(queryGetVacancies);
+                var result = _cqrsService.Execute<List<ISourceVacancy>>(queryGetVacancies);
 
                 // добавляем в БД
                 var commandAddVacanciesToDb = new AddVacanciesToDbCommand()
@@ -117,7 +117,7 @@ namespace Web.Host.Service.Controllers.Api.Vacancy
                     SourceId = sourceId
                 };
 
-                var result = _cqrsService.Execute<VacanciesFromDbQuery, List<ISourceVacancy>>(queryGetVacanciesFromDb);
+                var result = _cqrsService.Execute<List<ISourceVacancy>>(queryGetVacanciesFromDb);
 
                 return result;
             }

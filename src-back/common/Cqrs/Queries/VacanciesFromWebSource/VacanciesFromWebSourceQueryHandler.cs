@@ -29,7 +29,7 @@ namespace Cqrs.Queries.VacanciesFromWebSource
             {
                 SourceId = query.SourceId
             };
-            var source = _cqrsService.Execute<SourceFromDbQuery, Models.Source>(querySource);
+            var source = _cqrsService.Execute<Models.Source>(querySource);
 
 
             if (source == null)

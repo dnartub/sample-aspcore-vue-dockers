@@ -20,8 +20,7 @@ namespace Cqrs.Interfaces
         /// <summary>
         /// Выполнение запроса на получение данных
         /// </summary>
-        TResult Execute<TQuery, TResult>(TQuery query) where TQuery : IQuery;
-
+        TResult Execute<TResult>(IQuery query);
 
         /// <summary>
         /// Получение обработчика для выполнения команды
@@ -29,7 +28,7 @@ namespace Cqrs.Interfaces
         /// <typeparam name="TCommand"></typeparam>
         /// <param name="command"></param>
         /// <returns></returns>
-        ICommandHandler<TCommand> GetHandler<TCommand>(TCommand command) where TCommand : ICommand;
+        ICommandHandler<TCommand> GetHandler<TCommand>() where TCommand : ICommand;
 
         /// <summary>
         /// Получение обработчика для выпонения запроса
@@ -38,6 +37,6 @@ namespace Cqrs.Interfaces
         /// <typeparam name="TResult"></typeparam>
         /// <param name="query"></param>
         /// <returns></returns>
-        IQueryHandler<TQuery, TResult> GetHandler<TQuery, TResult>(TQuery query) where TQuery : IQuery;
+        IQueryHandler<TQuery, TResult> GetHandler<TQuery, TResult>() where TQuery : IQuery;
     }
 }
