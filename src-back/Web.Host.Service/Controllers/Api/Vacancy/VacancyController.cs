@@ -1,9 +1,9 @@
-﻿using Cqrs.Commands.AddVacanciesToDb;
+﻿using Web.Host.Cqrs.Commands.AddVacanciesToDb;
 using Cqrs.Interfaces;
-using Cqrs.Queries.AllSourcesFromDb;
-using Cqrs.Queries.FindSourceInDb;
-using Cqrs.Queries.VacanciesFromDb;
-using Cqrs.Queries.VacanciesFromWebSource;
+using Web.Host.Cqrs.Queries.AllSourcesFromDb;
+using Web.Host.Cqrs.Queries.FindSourceInDb;
+using Web.Host.Cqrs.Queries.VacanciesFromDb;
+using Web.Host.Cqrs.Queries.VacanciesFromWebSource;
 using Microsoft.AspNetCore.Mvc;
 using MsSqlDatabase.Entities;
 using Parsers.Source.Implementations.SourceParsers;

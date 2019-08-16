@@ -12,10 +12,15 @@ namespace Cqrs.Services
 {
     public class CqrsDictionaryService: Dictionary<Type,Type>, ICqrsDictionaryService
     {
-        private readonly Type[] AssemblyTypes = typeof(CqrsDictionaryService).Assembly.GetTypes();
+        private Type[] AssemblyTypes { get; set; }
 
-        public CqrsDictionaryService()
+        public CqrsDictionaryService(Type[] TypesFromAsseblies)
         {
+            AssemblyTypes = TypesFromAsseblies
+                .Select(t=>t.Assembly)
+                .SelectMany(a=> a.GetTypes())
+                .ToArray();
+
             Initialize();
         }
 

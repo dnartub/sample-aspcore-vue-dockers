@@ -1,6 +1,4 @@
-﻿using Web.Host.Service.Configuration;
-using Web.Host.Service.Configuration.Impl;
-using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
@@ -12,9 +10,8 @@ using System.Threading.Tasks;
 using System.Linq;
 using Microsoft.AspNetCore.HttpOverrides;
 using Web.Host.Service.Infrastructure.DI;
-using MsSqlDatabase.Context;
-using MsSqlDatabase.Initializers;
-using Cqrs.Services;
+
+
 
 namespace Web.Host.Service
 {

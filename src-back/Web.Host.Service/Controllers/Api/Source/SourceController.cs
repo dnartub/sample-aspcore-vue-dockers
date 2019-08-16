@@ -7,7 +7,7 @@ using System.Linq;
 using Serilog;
 using System.Threading.Tasks;
 using Cqrs.Interfaces;
-using Cqrs.Queries.AllSourcesFromDb;
+using Web.Host.Cqrs.Queries.AllSourcesFromDb;
 
 namespace Web.Host.Service.Controllers.Api.Source
 {

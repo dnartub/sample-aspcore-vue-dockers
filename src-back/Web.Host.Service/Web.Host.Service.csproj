@@ -17,7 +17,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="6.1.1" />
+    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="7.0.0" />
     <PackageReference Include="Microsoft.AspNetCore" Version="2.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc" Version="2.2.0" />
     <PackageReference Include="Microsoft.Extensions.Http" Version="2.2.0" />
@@ -32,6 +32,7 @@
     <ProjectReference Include="..\common\HttpRequest.Core\HttpRequest.Core.csproj" />
     <ProjectReference Include="..\common\MsSqlDatabase\MsSqlDatabase.csproj" />
     <ProjectReference Include="..\common\Parsers.Source\Parsers.Source.csproj" />
+    <ProjectReference Include="..\Web.Host.Cqrs\Web.Host.Cqrs.csproj" />
   </ItemGroup>
 
 </Project>
