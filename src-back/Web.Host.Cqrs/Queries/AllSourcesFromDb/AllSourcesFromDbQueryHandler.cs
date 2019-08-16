@@ -5,24 +5,21 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Utils.Activators.Creators;
 
 namespace Web.Host.Cqrs.Queries.AllSourcesFromDb
 {
     public class AllSourcesFromDbQueryHandler : IQueryHandler<AllSourcesFromDbQuery, List<Models.Source>>
     {
-        SvContext _context;
-        IMapper _mapper;
-
-        public AllSourcesFromDbQueryHandler(SvContext context, IMapper mapper)
-        {
-            _context = context;
-            _mapper = mapper;
-        }
+        [DiService]
+        public SvContext Context { get; set; }
+        [DiService]
+        public IMapper Mapper { get; set; }
 
         public List<Models.Source> GetResult(AllSourcesFromDbQuery query)
         {
-            var dals = _context.Sources.ToList();
-            return _mapper.Map<List<Models.Source>>(dals);
+            var dals = Context.Sources.ToList();
+            return Mapper.Map<List<Models.Source>>(dals);
         }
     }
 }

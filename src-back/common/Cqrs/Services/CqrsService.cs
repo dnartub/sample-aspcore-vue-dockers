@@ -79,7 +79,7 @@ namespace Cqrs.Services
         private object CreateHandlerInstance(Type handlerType)
         {
             return InstanceCreator
-                .Use<ServiceProviderCreator>(Provider)
+                .Use<ServiceProviderPropertyCreator>(Provider)
                 .Create(handlerType);
         }
     }

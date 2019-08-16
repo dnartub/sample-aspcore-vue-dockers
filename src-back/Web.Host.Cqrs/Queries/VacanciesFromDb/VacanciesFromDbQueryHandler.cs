@@ -7,29 +7,26 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Utils.Activators.Creators;
 
 namespace Web.Host.Cqrs.Queries.VacanciesFromDb
 {
     public class VacanciesFromDbQueryHandler : IQueryHandler<VacanciesFromDbQuery, List<ISourceVacancy>>
     {
-        SvContext _context;
-        IMapper _mapper;
-
-        public VacanciesFromDbQueryHandler(SvContext context, IMapper mapper)
-        {
-            _context = context;
-            _mapper = mapper;
-        }
+        [DiService]
+        public SvContext Context { get; set; }
+        [DiService]
+        public IMapper Mapper { get; set; }
 
         public List<ISourceVacancy> GetResult(VacanciesFromDbQuery query)
         {
-            var dals = _context.Vacancies
+            var dals = Context.Vacancies
                 .Where(x => x.SourceId == query.SourceId)
                 .OrderByDescending(x => x.LoadingTime)
                 .Take(50)
                 .ToList();
 
-            var result = _mapper.Map<List<SourceVacancy>>(dals)
+            var result = Mapper.Map<List<SourceVacancy>>(dals)
                 .Select(x => x as ISourceVacancy)
                 .ToList();
 

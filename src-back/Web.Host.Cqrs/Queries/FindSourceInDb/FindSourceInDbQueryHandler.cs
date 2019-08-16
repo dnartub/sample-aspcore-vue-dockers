@@ -6,24 +6,21 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Utils.Activators.Creators;
 
 namespace Web.Host.Cqrs.Queries.FindSourceInDb
 {
     public class FindSourceInDbQueryHandler : IQueryHandler<FindSourceInDbQuery, List<Models.Source>>
     {
-        SvContext _context;
-        IMapper _mapper;
-
-        public FindSourceInDbQueryHandler(SvContext context, IMapper mapper)
-        {
-            _context = context;
-            _mapper = mapper;
-        }
+        [DiService]
+        public SvContext Context { get; set; }
+        [DiService]
+        public IMapper Mapper { get; set; }
 
         public List<Models.Source> GetResult(FindSourceInDbQuery query)
         {
-            var dals = _context.Sources.Where(query.Predicate).ToList();
-            return _mapper.Map<List<Models.Source>>(dals);
+            var dals = Context.Sources.Where(query.Predicate).ToList();
+            return Mapper.Map<List<Models.Source>>(dals);
         }
     }
 }

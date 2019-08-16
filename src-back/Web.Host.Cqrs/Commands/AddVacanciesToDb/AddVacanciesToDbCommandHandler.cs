@@ -4,17 +4,15 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Utils.Activators.Creators;
 
 namespace Web.Host.Cqrs.Commands.AddVacanciesToDb
 {
     public class AddVacanciesToDbCommandHandler : ICommandHandler<AddVacanciesToDbCommand>
     {
-        SvContext _context;
+        [DiService]
+        public SvContext Context { get; set; }
 
-        public AddVacanciesToDbCommandHandler(SvContext context)
-        {
-            _context = context;
-        }
         public void Execute(AddVacanciesToDbCommand command)
         {
             foreach (var vacancy in command.Vacancies)
@@ -34,12 +32,12 @@ namespace Web.Host.Cqrs.Commands.AddVacanciesToDb
 
                 // TODO: Не добавлять, если совпадают по URL
 
-                _context.Add(dal);
+                Context.Add(dal);
             }
 
             if (command.Vacancies.Any())
             {
-                _context.SaveChanges();
+                Context.SaveChanges();
             }
         }
     }

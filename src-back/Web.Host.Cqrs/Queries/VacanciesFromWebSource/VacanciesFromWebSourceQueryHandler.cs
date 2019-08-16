@@ -5,22 +5,18 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Utils.Activators.Creators;
 
 namespace Web.Host.Cqrs.Queries.VacanciesFromWebSource
 {
     public class VacanciesFromWebSourceQueryHandler : IQueryHandler<VacanciesFromWebSourceQuery, List<ISourceVacancy>>
     {
-        ICqrsService _cqrsService;
-        IEnumerable<ISourceParser> _parsers;
-        IWebSourceLoader _loader;
-
-        public VacanciesFromWebSourceQueryHandler(ICqrsService cqrsService, IEnumerable<ISourceParser> parsers, IWebSourceLoader loader )
-        {
-            _cqrsService = cqrsService;
-            _parsers = parsers;
-            _loader = loader;
-        }
-
+        [DiService]
+        public ICqrsService CqrsService { get; set; }
+        [DiService]
+        public IEnumerable<ISourceParser> Parsers { get; set; }
+        [DiService]
+        public IWebSourceLoader Loader { get; set; }
 
         public List<ISourceVacancy> GetResult(VacanciesFromWebSourceQuery query)
         {
@@ -29,7 +25,7 @@ namespace Web.Host.Cqrs.Queries.VacanciesFromWebSource
             {
                 SourceId = query.SourceId
             };
-            var source = _cqrsService.Execute<Models.Source>(querySource);
+            var source = CqrsService.Execute<Models.Source>(querySource);
 
 
             if (source == null)
@@ -38,16 +34,16 @@ namespace Web.Host.Cqrs.Queries.VacanciesFromWebSource
             }
 
             // выбираем нужный парсер
-            var parser = _parsers
+            var parser = Parsers
                 .FirstOrDefault(x => x.IsSuitable(source.SourceParser));
 
             // подключаем его к загрузчику
-            _loader
+            Loader
                 .UseUrl(source.Url)
                 .Use(parser);
 
             // загружаем
-            var result = _loader.Load().Result; // в интерфейсе команд нужны асинхронные методы, чтобы убрать такие корявости - но в этом примере, не до тонкой индеальности
+            var result = Loader.Load().Result; // в интерфейсе команд нужны асинхронные методы, чтобы убрать такие корявости - но в этом примере, не до тонкой индеальности
 
             return result;
         }
