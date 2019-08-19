@@ -33,11 +33,11 @@ namespace Web.Host.Service.Controllers.Api.Source
         /// </summary>
         /// <returns></returns>
         [HttpGet]
-        public IActionResult Get()
+        public async Task<IActionResult> Get()
         {
             try
             {
-                var result = _cqrsService.GetResult(new AllSourcesFromDbQuery());
+                var result = await _cqrsService.GetResult(new AllSourcesFromDbQuery());
 
                 return base.SuccessResult(result);
             }

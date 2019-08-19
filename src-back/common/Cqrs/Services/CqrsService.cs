@@ -21,10 +21,10 @@ namespace Cqrs.Services
             Provider = provider;
         }
 
-        public void Execute<TCommand>(TCommand command) where TCommand : ICommand
+        public async Task Execute<TCommand>(TCommand command) where TCommand : ICommand
         {
             var handlerInstance = CreateHandlerInstance(command) as ICommandHandler<TCommand>;
-            handlerInstance.Execute(command);
+            await handlerInstance.Execute(command);
         }
 
         public TResult GetResult<TResult>(IQuery<TResult> query) 

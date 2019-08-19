@@ -6,10 +6,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Utils.Activators.Creators;
+using System.Threading.Tasks;
 
 namespace Web.Host.Cqrs.Queries.VacanciesFromWebSource
 {
-    public class VacanciesFromWebSourceQueryHandler : IQueryHandler<VacanciesFromWebSourceQuery, List<ISourceVacancy>>
+    public class VacanciesFromWebSourceQueryHandler : IQueryHandler<VacanciesFromWebSourceQuery, Task<List<ISourceVacancy>>>
     {
         [DiService]
         public ICqrsService CqrsService { get; set; }
@@ -18,14 +19,14 @@ namespace Web.Host.Cqrs.Queries.VacanciesFromWebSource
         [DiService]
         public IWebSourceLoader Loader { get; set; }
 
-        public List<ISourceVacancy> GetResult(VacanciesFromWebSourceQuery query)
+        public async Task<List<ISourceVacancy>> GetResult(VacanciesFromWebSourceQuery query)
         {
             // TODO: по возможности убрать в бизнес слой
             var querySource = new SourceFromDbQuery()
             {
                 SourceId = query.SourceId
             };
-            var source = CqrsService.GetResult(querySource);
+            var source = await CqrsService.GetResult(querySource);
 
 
             if (source == null)
@@ -43,7 +44,7 @@ namespace Web.Host.Cqrs.Queries.VacanciesFromWebSource
                 .Use(parser);
 
             // загружаем
-            var result = Loader.Load().Result; // в интерфейсе команд нужны асинхронные методы, чтобы убрать такие корявости - но в этом примере, не до тонкой индеальности
+            var result = await Loader.Load();
 
             return result;
         }

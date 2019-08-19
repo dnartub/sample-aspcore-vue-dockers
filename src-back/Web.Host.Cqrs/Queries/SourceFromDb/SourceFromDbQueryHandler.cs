@@ -6,19 +6,20 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using Utils.Activators.Creators;
+using System.Threading.Tasks;
 
 namespace Web.Host.Cqrs.Queries.SourceFromDb
 {
-    public class SourceFromDbQueryHandler : IQueryHandler<SourceFromDbQuery, Source>
+    public class SourceFromDbQueryHandler : IQueryHandler<SourceFromDbQuery, Task<Source>>
     {
         [DiService]
         public SvContext Context { get; set; }
         [DiService]
         public IMapper Mapper { get; set; }
 
-        public Models.Source GetResult(SourceFromDbQuery query)
+        public async Task<Models.Source> GetResult(SourceFromDbQuery query)
         {
-            var dal = Context.Sources.Find(query.SourceId);
+            var dal = await Context.Sources.FindAsync(query.SourceId);
             return Mapper.Map<Models.Source>(dal);
         }
     }

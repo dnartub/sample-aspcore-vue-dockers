@@ -41,11 +41,11 @@ namespace Web.Host.Service.Controllers.Api.Vacancy
         /// </summary>
         /// <returns></returns>
         [HttpGet("{sourceId:Guid}")]
-        public IActionResult Get([FromRoute] Guid sourceId)
+        public async Task<IActionResult> Get([FromRoute] Guid sourceId)
         {
             try
             {
-                var result = GetVacancies(sourceId); 
+                var result = await GetVacancies(sourceId); 
                 return base.SuccessResult(result);
             }
             catch (Exception ex)
@@ -60,14 +60,14 @@ namespace Web.Host.Service.Controllers.Api.Vacancy
         /// </summary>
         /// <returns></returns>
         [HttpGet]
-        public IActionResult Get()
+        public async Task<IActionResult> Get()
         {
             try
             {
                 var query = new FindSourceInDbQuery() {
                     Predicate = x => x.SourceParser == MsSqlDatabase.Enums.SourceParsers.RabotaRu
                 };
-                var source = _cqrsService.GetResult(query)
+                var source = (await _cqrsService.GetResult(query))
                     .FirstOrDefault();
 
                 if (source == null)
@@ -75,7 +75,7 @@ namespace Web.Host.Service.Controllers.Api.Vacancy
                     throw new Exception("Нет данных об источнике Работа.RU");
                 }
 
-                var result = GetVacancies(source.Id);
+                var result = await GetVacancies(source.Id);
 
                 return base.SuccessResult(result);
             }
@@ -87,7 +87,7 @@ namespace Web.Host.Service.Controllers.Api.Vacancy
         }
 
         // TODO: выделить бизнес-слой и там управлять логикой вызова команд получения из источника и добавления в БД (Step Builder)
-        private List<ISourceVacancy> GetVacancies(Guid sourceId)
+        private async Task<List<ISourceVacancy>> GetVacancies(Guid sourceId)
         {
             try
             {
@@ -97,7 +97,7 @@ namespace Web.Host.Service.Controllers.Api.Vacancy
                     SourceId = sourceId
                 };
 
-                var result = _cqrsService.GetResult(queryGetVacancies);
+                var result = await _cqrsService.GetResult(queryGetVacancies);
 
                 // добавляем в БД
                 var commandAddVacanciesToDb = new AddVacanciesToDbCommand()
@@ -105,7 +105,7 @@ namespace Web.Host.Service.Controllers.Api.Vacancy
                     SourceId = sourceId,
                     Vacancies = result
                 };
-                _cqrsService.Execute(commandAddVacanciesToDb);
+                await _cqrsService.Execute(commandAddVacanciesToDb);
 
                 return result;
             }
@@ -117,7 +117,7 @@ namespace Web.Host.Service.Controllers.Api.Vacancy
                     SourceId = sourceId
                 };
 
-                var result = _cqrsService.GetResult(queryGetVacanciesFromDb);
+                var result = await _cqrsService.GetResult(queryGetVacanciesFromDb);
 
                 return result;
             }

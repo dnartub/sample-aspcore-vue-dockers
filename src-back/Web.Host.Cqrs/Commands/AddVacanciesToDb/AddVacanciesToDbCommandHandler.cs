@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using Utils.Activators.Creators;
 
 namespace Web.Host.Cqrs.Commands.AddVacanciesToDb
@@ -13,7 +14,7 @@ namespace Web.Host.Cqrs.Commands.AddVacanciesToDb
         [DiService]
         public SvContext Context { get; set; }
 
-        public void Execute(AddVacanciesToDbCommand command)
+        public async Task Execute(AddVacanciesToDbCommand command)
         {
             foreach (var vacancy in command.Vacancies)
             {
@@ -37,8 +38,22 @@ namespace Web.Host.Cqrs.Commands.AddVacanciesToDb
 
             if (command.Vacancies.Any())
             {
-                Context.SaveChanges();
+                await Context.SaveChangesAsync();
             }
+        }
+
+        public async Task Down(AddVacanciesToDbCommand command)
+        {
+            foreach (var vacancy in command.Vacancies)
+            {
+                var dal = Context.Vacancies.Where(x => x.SourceId == command.SourceId && x.Url == vacancy.Url).FirstOrDefault();
+                if (dal != null)
+                {
+                    Context.Remove(dal);
+                }
+            }
+
+            await Context.SaveChangesAsync();
         }
     }
 }

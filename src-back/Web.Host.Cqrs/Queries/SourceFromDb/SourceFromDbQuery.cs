@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace Web.Host.Cqrs.Queries.SourceFromDb
 {
@@ -9,7 +10,7 @@ namespace Web.Host.Cqrs.Queries.SourceFromDb
     /// Источник из БД
     /// <see cref="SourceFromDbQueryHandler">
     /// </summary>
-    public class SourceFromDbQuery:IQuery<Models.Source>
+    public class SourceFromDbQuery:IQuery<Task<Models.Source>>
     {
         public Guid SourceId { get; set; }
     }

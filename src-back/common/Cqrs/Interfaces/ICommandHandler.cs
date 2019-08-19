@@ -7,6 +7,7 @@ namespace Cqrs.Interfaces
 {
     public interface ICommandHandler<T> where T: ICommand
     {
-        void Execute(T command);
+        Task Execute(T command);
+        Task Down(T command);
     }
 }
