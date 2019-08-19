@@ -48,11 +48,11 @@ namespace Cqrs.Services
             return handlerInstance as ICommandHandler<TCommand>;
         }
 
-        //public IQueryHandler<TQuery, TResult> GetHandler<TQuery, TResult>() where TQuery : IQuery<TResult>
-        //{
-        //    var handlerInstance = CreateHandlerInstance<TQuery>();
-        //    return handlerInstance as IQueryHandler<TQuery, TResult>;
-        //}
+        public IQueryHandler<TQuery, TResult> GetHandler<TQuery, TResult>() where TQuery : IQuery<TResult>
+        {
+            var handlerInstance = CreateHandlerInstance<TQuery>();
+            return handlerInstance as IQueryHandler<TQuery, TResult>;
+        }
 
         private object CreateHandlerInstance<TAction>()
         {
