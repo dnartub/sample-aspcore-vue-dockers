@@ -27,21 +27,19 @@ namespace Cqrs.Services
             handlerInstance.Execute(command);
         }
 
-        // этот метод вызывается через рефлексию в виду замороченног преобразования к generic-интерфейсу
-        public TResult GenericTagetMethodExecuteQuery<TQuery, TResult>(TQuery query) where TQuery : IQuery
-        {
-            var handlerInstance = CreateHandlerInstance(query) as IQueryHandler<TQuery, TResult>;
-            var result = handlerInstance.GetResult(query);
-            return result;
-        }
-
-        public TResult Execute<TResult>(IQuery query) 
+        public TResult GetResult<TResult>(IQuery<TResult> query) 
         {
             // передача типа на generic-метод
-            MethodInfo method = typeof(CqrsService).GetMethod(nameof(GenericTagetMethodExecuteQuery));
-            MethodInfo genericMethod = method.MakeGenericMethod(query.GetType(),typeof(TResult));
+            MethodInfo method = typeof(CqrsService).GetMethod(nameof(GetResultTemplete));
+            MethodInfo genericMethod = method.MakeGenericMethod(query.GetType(), typeof(TResult));
             var result = genericMethod.Invoke(this, new object[] { query });
             return (TResult)result;
+        }
+
+        public TResult GetResultTemplete<TQuery,TResult>(TQuery query) where TQuery: IQuery<TResult>
+        {
+            var handlerInstance = CreateHandlerInstance(query) as IQueryHandler<TQuery, TResult>;
+            return handlerInstance.GetResult(query);
         }
 
         public ICommandHandler<TCommand> GetHandler<TCommand>() where TCommand : ICommand
@@ -50,11 +48,11 @@ namespace Cqrs.Services
             return handlerInstance as ICommandHandler<TCommand>;
         }
 
-        public IQueryHandler<TQuery, TResult> GetHandler<TQuery, TResult>() where TQuery : IQuery
-        {
-            var handlerInstance = CreateHandlerInstance<TQuery>();
-            return handlerInstance as IQueryHandler<TQuery, TResult>;
-        }
+        //public IQueryHandler<TQuery, TResult> GetHandler<TQuery, TResult>() where TQuery : IQuery<TResult>
+        //{
+        //    var handlerInstance = CreateHandlerInstance<TQuery>();
+        //    return handlerInstance as IQueryHandler<TQuery, TResult>;
+        //}
 
         private object CreateHandlerInstance<TAction>()
         {
@@ -66,7 +64,7 @@ namespace Cqrs.Services
         private object CreateHandlerInstance<TAction>(TAction action)
         {
             // берем из соответствия IHandler<IAction>
-            var handlerType = CqrsDictionaryService.GetHandlerType(typeof(TAction));
+            var handlerType = CqrsDictionaryService.GetHandlerType(action.GetType());
             return CreateHandlerInstance(handlerType);
         }
 

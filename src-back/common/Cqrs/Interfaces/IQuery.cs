@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace Cqrs.Interfaces
 {
-    public interface IQuery
+    public interface IQuery<TResult>
     {
     }
 }

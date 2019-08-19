@@ -9,7 +9,7 @@ using Utils.Activators.Creators;
 
 namespace Web.Host.Cqrs.Queries.SourceFromDb
 {
-    public class SourceFromDbQueryHandler : IQueryHandler<SourceFromDbQuery, Models.Source>
+    public class SourceFromDbQueryHandler : IQueryHandler<SourceFromDbQuery, Source>
     {
         [DiService]
         public SvContext Context { get; set; }

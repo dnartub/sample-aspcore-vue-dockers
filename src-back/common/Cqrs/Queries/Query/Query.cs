@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Cqrs.Queries.Query
 {
-    abstract class Query:IQuery
+    abstract class Query:IQuery<object>
     {
     }
 }

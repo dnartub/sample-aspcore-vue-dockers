@@ -10,7 +10,7 @@ namespace Web.Host.Cqrs.Queries.FindSourceInDb
     /// Поиск среди Источников в БД
     /// <see cref="FindSourceInDbQueryHandler"/>
     /// </summary>
-    public class FindSourceInDbQuery:IQuery
+    public class FindSourceInDbQuery:IQuery<List<Models.Source>>
     {
         public Expression<Func<MsSqlDatabase.Entities.Source, Boolean>> Predicate { get; set; }
     }

@@ -37,7 +37,7 @@ namespace Web.Host.Service.Controllers.Api.Source
         {
             try
             {
-                var result = _cqrsService.Execute<List<Cqrs.Models.Source>>(new AllSourcesFromDbQuery());
+                var result = _cqrsService.GetResult(new AllSourcesFromDbQuery());
 
                 return base.SuccessResult(result);
             }

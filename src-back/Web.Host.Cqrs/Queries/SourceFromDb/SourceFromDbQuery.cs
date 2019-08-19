@@ -9,7 +9,7 @@ namespace Web.Host.Cqrs.Queries.SourceFromDb
     /// Источник из БД
     /// <see cref="SourceFromDbQueryHandler">
     /// </summary>
-    public class SourceFromDbQuery:IQuery
+    public class SourceFromDbQuery:IQuery<Models.Source>
     {
         public Guid SourceId { get; set; }
     }

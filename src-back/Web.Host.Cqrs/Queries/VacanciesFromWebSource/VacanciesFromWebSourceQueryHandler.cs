@@ -25,7 +25,7 @@ namespace Web.Host.Cqrs.Queries.VacanciesFromWebSource
             {
                 SourceId = query.SourceId
             };
-            var source = CqrsService.Execute<Models.Source>(querySource);
+            var source = CqrsService.GetResult(querySource);
 
 
             if (source == null)

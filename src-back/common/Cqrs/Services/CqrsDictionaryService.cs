@@ -41,7 +41,7 @@ namespace Cqrs.Services
         private void Initialize()
         {
             Add<ICommand, ICommandHandler<Command>>();
-            Add<IQuery, IQueryHandler<Query,object>>();
+            Add<IQuery<object>, IQueryHandler<Query,object>>();
         }
 
         /// <summary>
@@ -52,7 +52,7 @@ namespace Cqrs.Services
         private void Add<TAction, THandler>() 
         {
             // все типы в текущем проекте реализующие интерфейс TAction
-            var actionTypes = AssemblyTypes.Where(type => !type.IsAbstract && typeof(TAction).IsAssignableFrom(type))
+            var actionTypes = AssemblyTypes.Where(type => !type.IsAbstract && IsImplementGenericInterface<TAction>(type))
                 .Where(type => typeof(TAction) != type)
                 .ToList();
 
