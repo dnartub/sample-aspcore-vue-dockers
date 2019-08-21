@@ -340,7 +340,7 @@ namespace Chains
                     .Then<Step2, string>()
                     .Then<Step3, string>()
                     .Then<Step4, string>()
-                        .OnException<TestException, Step5>(step3Result => BusinessLogicChain<string>.New<Step5, string>(step3Result))
+                        .OnException<TestException, string, Step5>(step3Result => BusinessLogicChain<string>.New<Step5, string>(step3Result))
                     .RunAsync();
                 return await t;
             }
@@ -370,7 +370,7 @@ namespace Chains
                     .Then<Step2, string>() // cancel
                     .Then<Step3, string>() // cancel
                     .Then<Step4, string>()
-                        .OnException<TestException, Step6>(step3Result =>
+                        .OnException<TestException, string, Step6>(step3Result =>
                             BusinessLogicChain<string>
                             .New<Step5, string>(step3Result) // cancel
                             .Then<Step6, string>() // fail

@@ -32,6 +32,7 @@
     <ProjectReference Include="..\common\HttpRequest.Core\HttpRequest.Core.csproj" />
     <ProjectReference Include="..\common\MsSqlDatabase\MsSqlDatabase.csproj" />
     <ProjectReference Include="..\common\Parsers.Source\Parsers.Source.csproj" />
+    <ProjectReference Include="..\Web.Host.BLL\Web.Host.BLL.csproj" />
     <ProjectReference Include="..\Web.Host.Cqrs\Web.Host.Cqrs.csproj" />
   </ItemGroup>
 

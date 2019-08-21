@@ -17,6 +17,15 @@ namespace Cqrs.Interfaces
         /// <typeparam name="TCommand"></typeparam>
         /// <param name="command"></param>
         Task Execute<TCommand>(TCommand command) where TCommand : ICommand;
+        
+        /// <summary>
+        /// Отмена команды
+        /// </summary>
+        /// <typeparam name="TCommand"></typeparam>
+        /// <param name="command"></param>
+        /// <returns></returns>
+        Task Down<TCommand>(TCommand command) where TCommand : ICommand;
+
         /// <summary>
         /// Выполнение запроса на получение данных
         /// </summary>

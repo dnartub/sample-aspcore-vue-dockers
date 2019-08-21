@@ -27,6 +27,12 @@ namespace Cqrs.Services
             await handlerInstance.Execute(command);
         }
 
+        public async Task Down<TCommand>(TCommand command) where TCommand : ICommand
+        {
+            var handlerInstance = CreateHandlerInstance(command) as ICommandHandler<TCommand>;
+            await handlerInstance.Down(command);
+        }
+
         public TResult GetResult<TResult>(IQuery<TResult> query) 
         {
             // передача типа на generic-метод

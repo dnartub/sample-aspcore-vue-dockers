@@ -21,26 +21,13 @@ namespace Web.Host.Cqrs.Queries.VacanciesFromWebSource
 
         public async Task<List<ISourceVacancy>> GetResult(VacanciesFromWebSourceQuery query)
         {
-            // TODO: по возможности убрать в бизнес слой
-            var querySource = new SourceFromDbQuery()
-            {
-                SourceId = query.SourceId
-            };
-            var source = await CqrsService.GetResult(querySource);
-
-
-            if (source == null)
-            {
-                throw new Exception($"Нет данных об источнике {query.SourceId}");
-            }
-
             // выбираем нужный парсер
             var parser = Parsers
-                .FirstOrDefault(x => x.IsSuitable(source.SourceParser));
+                .FirstOrDefault(x => x.IsSuitable(query.Source.SourceParser));
 
             // подключаем его к загрузчику
             Loader
-                .UseUrl(source.Url)
+                .UseUrl(query.Source.Url)
                 .Use(parser);
 
             // загружаем

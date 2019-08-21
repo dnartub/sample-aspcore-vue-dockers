@@ -16,6 +16,7 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using Web.Host.Service.Controllers.Base;
+using Web.Host.BLL.BusinessProcesses.LoadVacancies;
 
 namespace Web.Host.Service.Controllers.Api.Vacancy
 {
@@ -25,14 +26,12 @@ namespace Web.Host.Service.Controllers.Api.Vacancy
     [Route("api/[controller]")]
     public class VacancyController : ServiceController
     {
-        IWebSourceLoader _webSourceLoader;
-        IEnumerable<ISourceParser> _parsers;
         ICqrsService _cqrsService;
+        IServiceProvider _provider;
 
-        public VacancyController(IWebSourceLoader webSourceLoader, IEnumerable<ISourceParser> parsers, ICqrsService cqrsService)
+        public VacancyController(IServiceProvider provider,  ICqrsService cqrsService)
         {
-            _webSourceLoader = webSourceLoader;
-            _parsers = parsers;
+            _provider = provider;
             _cqrsService = cqrsService;
         }
 
@@ -64,6 +63,8 @@ namespace Web.Host.Service.Controllers.Api.Vacancy
         {
             try
             {
+                // TODO: БП по загрузке из источник по умолчанию
+
                 var query = new FindSourceInDbQuery() {
                     Predicate = x => x.SourceParser == MsSqlDatabase.Enums.SourceParsers.RabotaRu
                 };
@@ -86,45 +87,15 @@ namespace Web.Host.Service.Controllers.Api.Vacancy
             }
         }
 
-        // TODO: выделить бизнес-слой и там управлять логикой вызова команд получения из источника и добавления в БД (Step Builder)
         private async Task<List<ISourceVacancy>> GetVacancies(Guid sourceId)
         {
-            try
-            {
-                // получаем с ресурса
-                var queryGetVacancies = new VacanciesFromWebSourceQuery()
-                {
-                    SourceId = sourceId
-                };
-
-                var result = await _cqrsService.GetResult(queryGetVacancies);
-
-                // добавляем в БД
-                var commandAddVacanciesToDb = new AddVacanciesToDbCommand()
-                {
-                    SourceId = sourceId,
-                    Vacancies = result
-                };
-                await _cqrsService.Execute(commandAddVacanciesToDb);
-
-                return result;
+            // TODO: фабрика БП
+            var result = await new LoadVacanciesBP() {
+                Provider = _provider
             }
-            catch (HttpRequestException)
-            {
-                // сайт недоступен, берем из БД
-                var queryGetVacanciesFromDb = new VacanciesFromDbQuery()
-                {
-                    SourceId = sourceId
-                };
+            .RunAsync(sourceId);
 
-                var result = await _cqrsService.GetResult(queryGetVacanciesFromDb);
-
-                return result;
-            }
-            catch (Exception)
-            {
-                throw;
-            }
+            return result;
         }
     }
 }

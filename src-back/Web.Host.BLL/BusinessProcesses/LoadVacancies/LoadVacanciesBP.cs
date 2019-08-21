@@ -8,24 +8,26 @@ using Web.Host.Cqrs.Models;
 using Blc.Interfaces;
 using Blc.ChainBuilder;
 using System.Threading.Tasks;
+using Web.Host.BLL.BusinessProcesses.LoadVacancies.Models;
+using Utils.Activators.Creators;
 
 namespace Web.Host.BLL.BusinessProcesses.LoadVacancies
 {
     public class LoadVacanciesBP : IBusinessProcess<Guid, List<ISourceVacancy>>
     {
-        public async Task<List<ISourceVacancy>> RunAsync(Guid sourceId)
-        {
-            var task =  BusinessLogicChain<List<ISourceVacancy>>
+        [DiService]
+        public IServiceProvider Provider { get; set; }
+
+        public async Task<List<ISourceVacancy>> RunAsync(Guid sourceId) => 
+            await BusinessLogicChain<List<ISourceVacancy>>
                         .New<GetSourceFromDb, Source>(sourceId)
-                        .Then<LoadFromWebSource, List<ISourceVacancy>>()
-                            .OnException<HttpRequestException, LoadFromDb>(source =>
+                        .Then<LoadFromWebSource, SourceVacanciesModel>()
+                            .OnException<HttpRequestException, Source, LoadFromDb>(source =>
                                     BusinessLogicChain<List<ISourceVacancy>>
                                     .New<LoadFromDb, List<ISourceVacancy>>(source)
                              )
                         .Then<SaveToDb, List<ISourceVacancy>>()
-                        .RunAsync();
+                        .RunAsync(Provider);
 
-            return await task;
-        }
     }
 }

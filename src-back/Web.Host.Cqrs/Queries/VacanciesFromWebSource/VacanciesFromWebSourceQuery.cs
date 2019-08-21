@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
+using Web.Host.Cqrs.Models;
 
 namespace Web.Host.Cqrs.Queries.VacanciesFromWebSource
 {
@@ -13,6 +14,6 @@ namespace Web.Host.Cqrs.Queries.VacanciesFromWebSource
     /// </summary>
     public class VacanciesFromWebSourceQuery: IQuery<Task<List<ISourceVacancy>>>
     {
-        public Guid SourceId { get; set; }
+        public Source Source { get; set; }
     }
 }

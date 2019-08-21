@@ -24,17 +24,6 @@ namespace Blc.ChainBuilder
     public class BusinessLogicChainStep<TCurrentStep, TCurrentStepResult, TChainResult> : IBusinessLogicChainStepInvoker where TCurrentStep : class, IBusinessProcessStep<TCurrentStepResult>
     {
         IBusinessLogicChainStepInvoker _previosBusinessLogicChainStep;
-        IBusinessLogicChainStepInvoker IBusinessLogicChainStepInvoker.PreviosBusinessLogicChainStep
-        {
-            get
-            {
-                return _previosBusinessLogicChainStep;
-            }
-            set
-            {
-                _previosBusinessLogicChainStep = value;
-            }
-        }
 
         // входящие данные для первого шага - сквозные по всем шагам
         private object Request { get; set; }
@@ -85,7 +74,7 @@ namespace Blc.ChainBuilder
         /// <typeparam name="TFinalStep"></typeparam>
         /// <param name="onFailure"></param>
         /// <returns></returns>
-        public BusinessLogicChainStep<TCurrentStep, TCurrentStepResult, TChainResult> OnException<TExeception, TFinalStep>(Func<TCurrentStepResult, BusinessLogicChainStep<TFinalStep, TChainResult, TChainResult>> onFailure) where TExeception : Exception where TFinalStep : class, IBusinessProcessStep<TChainResult>
+        public BusinessLogicChainStep<TCurrentStep, TCurrentStepResult, TChainResult> OnException<TExeception, TPreviosStepResult, TFinalStep>(Func<TPreviosStepResult, BusinessLogicChainStep<TFinalStep, TChainResult, TChainResult>> onFailure) where TExeception : Exception where TFinalStep : class, IBusinessProcessStep<TChainResult>
         {
             OnExceptionFunc = onFailure;
             ExceptionType = typeof(TExeception);
@@ -187,7 +176,20 @@ namespace Blc.ChainBuilder
             return chainSteps;
         }
 
-        #region == internal non-generic methods for invoke ==
+        #region == internal non-generic methods/props for invoke ==
+
+        IBusinessLogicChainStepInvoker IBusinessLogicChainStepInvoker.PreviosBusinessLogicChainStep
+        {
+            get
+            {
+                return _previosBusinessLogicChainStep;
+            }
+            set
+            {
+                _previosBusinessLogicChainStep = value;
+            }
+        }
+
         async Task<object> IBusinessLogicChainStepInvoker.RunBusinessProcessStep(IServiceProvider provider, object previosResult)
         {
             CurrentBusinessProcessStep = provider == null
