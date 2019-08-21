@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace Blc.Interfaces
 {
@@ -13,8 +14,8 @@ namespace Blc.Interfaces
 
     public interface IBusinessProcessStep<TResult>
     {
-        TResult Run();
+        Task<TResult> RunAsync();
 
-        void Cancel();
+        Task CancelAsync();
     }
 }

@@ -3,17 +3,18 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using Blc.Interfaces;
+using System.Threading.Tasks;
 
 namespace Web.Host.BLL.BusinessProcesses.LoadVacancies.Steps
 {
     public class SaveToDb : IBusinessProcessStep<List<ISourceVacancy>>
     {
-        public void Cancel()
+        public async Task CancelAsync()
         {
-            ;
+            await Task.CompletedTask;
         }
 
-        public List<ISourceVacancy> Run()
+        public Task<List<ISourceVacancy>> RunAsync()
         {
             throw new NotImplementedException();
         }

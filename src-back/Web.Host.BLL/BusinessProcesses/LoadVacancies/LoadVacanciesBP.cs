@@ -7,14 +7,15 @@ using Web.Host.BLL.BusinessProcesses.LoadVacancies.Steps;
 using Web.Host.Cqrs.Models;
 using Blc.Interfaces;
 using Blc.ChainBuilder;
+using System.Threading.Tasks;
 
 namespace Web.Host.BLL.BusinessProcesses.LoadVacancies
 {
     public class LoadVacanciesBP : IBusinessProcess<Guid, List<ISourceVacancy>>
     {
-        public List<ISourceVacancy> Run(Guid sourceId)
+        public async Task<List<ISourceVacancy>> RunAsync(Guid sourceId)
         {
-            var t =  BusinessLogicChain<List<ISourceVacancy>>
+            var task =  BusinessLogicChain<List<ISourceVacancy>>
                         .New<GetSourceFromDb, Source>(sourceId)
                         .Then<LoadFromWebSource, List<ISourceVacancy>>()
                             .OnException<HttpRequestException, LoadFromDb>(source =>
@@ -22,9 +23,9 @@ namespace Web.Host.BLL.BusinessProcesses.LoadVacancies
                                     .New<LoadFromDb, List<ISourceVacancy>>(source)
                              )
                         .Then<SaveToDb, List<ISourceVacancy>>()
-                        .Run();
+                        .RunAsync();
 
-            return t;
+            return await task;
         }
     }
 }

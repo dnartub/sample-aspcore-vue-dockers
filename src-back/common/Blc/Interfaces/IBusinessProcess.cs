@@ -5,13 +5,8 @@ using System.Threading.Tasks;
 
 namespace Blc.Interfaces
 {
-    //public abstract class BusinessProcess<TReqest, TResult>
-    //{
-    //    public abstract TResult Run(TReqest request);
-    //}
-
     public interface IBusinessProcess<TReqest, TResult>
     {
-        TResult Run(TReqest request);
+        Task<TResult> RunAsync(TReqest request);
     }
 }

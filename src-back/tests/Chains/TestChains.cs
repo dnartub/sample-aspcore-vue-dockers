@@ -1,6 +1,7 @@
 using Blc.ChainBuilder;
 using Blc.Interfaces;
 using System;
+using System.Threading.Tasks;
 using Xunit;
 
 namespace Chains
@@ -13,52 +14,53 @@ namespace Chains
     public class TestChains
     {
         [Fact]
-        public void TestSimpleChain()
+        public async Task TestSimpleChain()
         {
-            var result = new BP().Run("request");
+            var result = await new BP().RunAsync("request");
             Assert.Equal("request -> Step1Result -> Step2Result -> Step3Result", result);
         }
 
         [Fact]
-        public void TestOnFailureChain()
+        public async Task TestOnFailureChain()
         {
-            var result = new BP2().Run("request");
+            var result = await new BP2().RunAsync("request");
             Assert.Equal("request -> Step1Result -> Step2Result -> Step3Result -> Step5Result", result);
         }
 
         [Fact]
-        public void TestFailure()
+        public async Task TestFailure()
         {
             TestFailureProcessTrace.TraceMessage = "";
 
-            Assert.Throws<TestException>(()=> new BP3().Run("request"));
+            await Assert.ThrowsAsync<TestException>(()=> new BP3().RunAsync("request"));
 
             Assert.Equal("/Step1Done/Step2Done/Step3Done/Step4Fail/Step3Cancel/Step2Cancel/Step1Cancel", TestFailureProcessTrace.TraceMessage);
         }
 
         [Fact]
-        public void TestFailureOnFailure()
+        public async Task TestFailureOnFailure()
         {
             TestFailureProcessTrace.TraceMessage = "";
 
-            Assert.Throws<TestException>(() => new BP4().Run("request"));
+            await Assert.ThrowsAsync<TestException>(() => new BP4().RunAsync("request"));
 
             Assert.Equal("/Step1Done/Step2Done/Step3Done/Step4Fail/Step5Done/Step6Fail/Step5Cancel/Step3Cancel/Step2Cancel/Step1Cancel", TestFailureProcessTrace.TraceMessage);
         }
 
         [Fact]
-        public void TestSwitchers()
+        public async Task TestSwitchers()
         {
-            var result = new BP5().Run("request");
+            var result = await new BP5().RunAsync("request");
             Assert.Equal("request -> Step1Result -> StepSwitcherResult:NoSwitch -> Step2_NoSwitchResult", result);
 
-            var result1 = new BP5().Run("request1");
+            var result1 = await new BP5().RunAsync("request1");
             Assert.Equal("request1 -> Step1Result -> StepSwitcherResult:Switch1 -> Step2_Switch1Result", result1);
 
-            var result2 = new BP5().Run("request2");
+            var result2 = await new BP5().RunAsync("request2");
             Assert.Equal("request2 -> Step1Result -> StepSwitcherResult:Switch2 -> Step2_Switch2Result", result2);
         }
 
+        #region == Test Data ==
 
         public class Step1 : IBusinessProcessStep<string>
         {
@@ -69,15 +71,16 @@ namespace Chains
                 _request = request;
             }
 
-            public  void Cancel()
+            public async Task CancelAsync()
             {
                 TestFailureProcessTrace.TraceMessage += "/Step1Cancel";
+                await Task.CompletedTask;
             }
 
-            public  string Run()
+            public async Task<string> RunAsync()
             {
                 TestFailureProcessTrace.TraceMessage += "/Step1Done";
-                return $"{_request} -> Step1Result";
+                return await Task.FromResult($"{_request} -> Step1Result");
             }
         }
 
@@ -91,15 +94,16 @@ namespace Chains
                 _request = request;
             }
 
-            public void Cancel()
+            public async Task CancelAsync()
             {
                 TestFailureProcessTrace.TraceMessage += "/Step2Cancel";
+                await Task.CompletedTask;
             }
 
-            public string Run()
+            public async Task<string> RunAsync()
             {
                 TestFailureProcessTrace.TraceMessage += "/Step2Done";
-                return $"{_request} -> Step2Result";
+                return await Task.FromResult($"{_request} -> Step2Result");
             }
         }
 
@@ -112,15 +116,16 @@ namespace Chains
                 _request = request;
             }
 
-            public void Cancel()
+            public async Task CancelAsync()
             {
                 TestFailureProcessTrace.TraceMessage += "/Step3Cancel";
+                await Task.CompletedTask;
             }
 
-            public string Run()
+            public async Task<string> RunAsync()
             {
                 TestFailureProcessTrace.TraceMessage += "/Step3Done";
-                return $"{_request} -> Step3Result";
+                return await Task.FromResult($"{_request} -> Step3Result");
             }
         }
 
@@ -138,14 +143,16 @@ namespace Chains
                 _request = request;
             }
 
-            public void Cancel()
+            public async Task CancelAsync()
             {
                 TestFailureProcessTrace.TraceMessage += "/Step4Cancel";
+                await Task.CompletedTask;
             }
 
-            public string Run()
+            public async Task<string> RunAsync()
             {
                 TestFailureProcessTrace.TraceMessage += "/Step4Fail";
+                await Task.CompletedTask;
                 throw new TestException("Step4 fail");
             }
         }
@@ -159,15 +166,16 @@ namespace Chains
                 _request = request;
             }
 
-            public void Cancel()
+            public async Task CancelAsync()
             {
                 TestFailureProcessTrace.TraceMessage += "/Step5Cancel";
+                await Task.CompletedTask;
             }
 
-            public string Run()
+            public async Task<string> RunAsync()
             {
                 TestFailureProcessTrace.TraceMessage += "/Step5Done";
-                return $"{_request} -> Step5Result";
+                return await Task.FromResult($"{_request} -> Step5Result");
             }
         }
 
@@ -180,14 +188,16 @@ namespace Chains
                 _request = request;
             }
 
-            public void Cancel()
+            public async Task CancelAsync()
             {
                 TestFailureProcessTrace.TraceMessage += "/Step6Cancel";
+                await Task.CompletedTask;
             }
 
-            public string Run()
+            public async Task<string> RunAsync()
             {
                 TestFailureProcessTrace.TraceMessage += "/Step6Fail";
+                await Task.CompletedTask;
                 throw new TestException("Step6 fail");
             }
         }
@@ -214,12 +224,13 @@ namespace Chains
                 _request = request;
             }
 
-            public void Cancel()
+            public async Task CancelAsync()
             {
                 TestFailureProcessTrace.TraceMessage += "/StepSwitcherCancel";
+                await Task.CompletedTask;
             }
 
-            public SwitcherModel Run()
+            public async Task<SwitcherModel> RunAsync()
             {
                 TestFailureProcessTrace.TraceMessage += "/StepSwitcherDone";
                 var result = Switcher.NoSwitch;
@@ -233,11 +244,11 @@ namespace Chains
                     result = Switcher.Switch2;
                 }
 
-                return new SwitcherModel()
+                return await Task.FromResult(new SwitcherModel()
                 {
                     Request = $"{_request} -> StepSwitcherResult:{result.ToString("G")}",
                     SwitchResult = result
-                };
+                });
             }
         }
 
@@ -250,15 +261,16 @@ namespace Chains
                 _request = request;
             }
 
-            public void Cancel()
+            public async Task CancelAsync()
             {
                 TestFailureProcessTrace.TraceMessage += "/Step2_Switch1Cancel";
+                await Task.CompletedTask;
             }
 
-            public string Run()
+            public async Task<string> RunAsync()
             {
                 TestFailureProcessTrace.TraceMessage += "/Step2_Switch1Done";
-                return $"{_request.Request} -> Step2_Switch1Result";
+                return await Task.FromResult($"{_request.Request} -> Step2_Switch1Result");
             }
         }
 
@@ -271,15 +283,16 @@ namespace Chains
                 _request = request;
             }
 
-            public void Cancel()
+            public async Task CancelAsync()
             {
                 TestFailureProcessTrace.TraceMessage += "/Step2_Switch2Cancel";
+                await Task.CompletedTask;
             }
 
-            public string Run()
+            public async Task<string> RunAsync()
             {
                 TestFailureProcessTrace.TraceMessage += "/Step2_Switch2Done";
-                return $"{_request.Request} -> Step2_Switch2Result";
+                return await Task.FromResult($"{_request.Request} -> Step2_Switch2Result");
             }
         }
 
@@ -292,34 +305,35 @@ namespace Chains
                 _request = request;
             }
 
-            public void Cancel()
+            public async Task CancelAsync()
             {
                 TestFailureProcessTrace.TraceMessage += "/Step2_NoSwitchCancel";
+                await Task.CompletedTask;
             }
 
-            public string Run()
+            public async Task<string> RunAsync()
             {
                 TestFailureProcessTrace.TraceMessage += "/Step2_NoSwitchDone";
-                return $"{_request.Request} -> Step2_NoSwitchResult";
+                return await Task.FromResult($"{_request.Request} -> Step2_NoSwitchResult");
             }
         }
 
         public class BP : IBusinessProcess<string, string>
         {
-            public string Run(string request)
+            public async Task<string> RunAsync(string request)
             {
                 var t = BusinessLogicChain<string>
-                    .New<Step1,string>(request)
-                    .Then<Step2,string>()
-                    .Then<Step3,string>()
-                    .Run();
-                return t;
+                    .New<Step1, string>(request)
+                    .Then<Step2, string>()
+                    .Then<Step3, string>()
+                    .RunAsync();
+                return await t;
             }
         }
 
         public class BP2 : IBusinessProcess<string, string>
         {
-            public string Run(string request)
+            public async Task<string> RunAsync(string request)
             {
                 var t = BusinessLogicChain<string>
                     .New<Step1, string>(request)
@@ -327,14 +341,14 @@ namespace Chains
                     .Then<Step3, string>()
                     .Then<Step4, string>()
                         .OnException<TestException, Step5>(step3Result => BusinessLogicChain<string>.New<Step5, string>(step3Result))
-                    .Run();
-                return t;
+                    .RunAsync();
+                return await t;
             }
         }
 
         public class BP3 : IBusinessProcess<string, string>
         {
-            public string Run(string request)
+            public async Task<string> RunAsync(string request)
             {
                 var t = BusinessLogicChain<string>
                     .New<Step1, string>(request) // cancel
@@ -342,14 +356,14 @@ namespace Chains
                     .Then<Step3, string>() // cancel
                     .Then<Step4, string>() // fail
                     .Then<Step5, string>() // not execute
-                    .Run();
-                return t;
+                    .RunAsync();
+                return await t;
             }
         }
 
         public class BP4 : IBusinessProcess<string, string>
         {
-            public string Run(string request)
+            public async Task<string> RunAsync(string request)
             {
                 var t = BusinessLogicChain<string>
                     .New<Step1, string>(request) // cancel
@@ -361,14 +375,14 @@ namespace Chains
                             .New<Step5, string>(step3Result) // cancel
                             .Then<Step6, string>() // fail
                         )
-                    .Run();
-                return t;
+                    .RunAsync();
+                return await t;
             }
         }
 
         public class BP5 : IBusinessProcess<string, string>
         {
-            public string Run(string request)
+            public async Task<string> RunAsync(string request)
             {
                 var t = BusinessLogicChain<string>
                     .New<Step1, string>(request)
@@ -376,11 +390,11 @@ namespace Chains
                         .OnStepResult(sm => sm.SwitchResult == Switcher.Switch1, sm => BusinessLogicChain<string>.New<Step2_Switch1, string>(sm))
                         .OnStepResult(sm => sm.SwitchResult == Switcher.Switch2, sm => BusinessLogicChain<string>.New<Step2_Switch2, string>(sm))
                     .Then<Step2_NoSwitch, string>()// no call
-                    .Run();
-                return t;
+                    .RunAsync();
+                return await t;
             }
-        }
-
+        } 
+        #endregion
 
     }
 }

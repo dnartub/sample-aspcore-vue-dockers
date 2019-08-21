@@ -124,7 +124,7 @@ namespace Blc.ChainBuilder
             {
                 try
                 {
-                    previosResult = chainStep.RunBusinessProcessStep(provider, previosResult);
+                    previosResult = await chainStep.RunBusinessProcessStep(provider, previosResult);
 
                     // сохраняем в выполненные
                     executedSteps.Add(chainStep);
@@ -160,7 +160,7 @@ namespace Blc.ChainBuilder
                     foreach (var cancelStep in executedSteps)
                     {
                         //await cancelStep.InvokeMethodAsync("Cancel", null);
-                        cancelStep.CancelBusinessProcessStep();
+                        await cancelStep.CancelBusinessProcessStep();
                     }
 
                     throw ex;
@@ -188,7 +188,7 @@ namespace Blc.ChainBuilder
         }
 
         #region == internal non-generic methods for invoke ==
-        object IBusinessLogicChainStepInvoker.RunBusinessProcessStep(IServiceProvider provider, object previosResult)
+        async Task<object> IBusinessLogicChainStepInvoker.RunBusinessProcessStep(IServiceProvider provider, object previosResult)
         {
             CurrentBusinessProcessStep = provider == null
                     ? InstanceCreator
@@ -198,15 +198,15 @@ namespace Blc.ChainBuilder
                         .Use<ServiceProviderPropertyCreator>(provider, new object[] { previosResult })
                         .Create<TCurrentStep>();
 
-            var result = CurrentBusinessProcessStep.Run();
+            var result = await CurrentBusinessProcessStep.RunAsync();
             return result;
         }
 
-        void IBusinessLogicChainStepInvoker.CancelBusinessProcessStep()
+        async Task IBusinessLogicChainStepInvoker.CancelBusinessProcessStep()
         {
             if (CurrentBusinessProcessStep != null)
             {
-                CurrentBusinessProcessStep.Cancel();
+                await CurrentBusinessProcessStep.CancelAsync();
             }
         }
 
@@ -256,18 +256,6 @@ namespace Blc.ChainBuilder
             return await RunAsync(provider);
         }
 
-        // TODO: удалить - пока для тестов
-        public TChainResult Run(IServiceProvider provider = null)
-        {
-            try
-            {
-                return RunAsync(provider).Result;
-            }
-            catch (Exception ex)
-            {
-                throw ex.InnerException;
-            }
-        }
         #endregion
 
     }
