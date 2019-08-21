@@ -369,7 +369,7 @@ namespace Chains
                     .New<Step1, string>(request) // cancel
                     .Then<Step2, string>() // cancel
                     .Then<Step3, string>() // cancel
-                    .Then<Step4, string>()
+                    .Then<Step4, string>() // fail
                         .OnException<TestException, string, Step6>(step3Result =>
                             BusinessLogicChain<string>
                             .New<Step5, string>(step3Result) // cancel

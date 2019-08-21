@@ -63,21 +63,7 @@ namespace Web.Host.Service.Controllers.Api.Vacancy
         {
             try
             {
-                // TODO: БП по загрузке из источник по умолчанию
-
-                var query = new FindSourceInDbQuery() {
-                    Predicate = x => x.SourceParser == MsSqlDatabase.Enums.SourceParsers.RabotaRu
-                };
-                var source = (await _cqrsService.GetResult(query))
-                    .FirstOrDefault();
-
-                if (source == null)
-                {
-                    throw new Exception("Нет данных об источнике Работа.RU");
-                }
-
-                var result = await GetVacancies(source.Id);
-
+                var result = await GetVacancies(null);
                 return base.SuccessResult(result);
             }
             catch (Exception ex)
@@ -87,7 +73,7 @@ namespace Web.Host.Service.Controllers.Api.Vacancy
             }
         }
 
-        private async Task<List<ISourceVacancy>> GetVacancies(Guid sourceId)
+        private async Task<List<ISourceVacancy>> GetVacancies(Guid? sourceId)
         {
             // TODO: фабрика БП
             var result = await new LoadVacanciesBP() {

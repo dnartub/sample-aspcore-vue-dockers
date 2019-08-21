@@ -9,7 +9,7 @@ namespace Utils.Activators
     /// <summary>
     /// Создание экземпляра класса
     /// </summary>
-    public class InstanceCreator
+    public class InstanceCreator // TODO: переделать. Экзепляры используются по назначению из основного класса(где создается). Их время жизни = в.ж основного класса. Должен учитываться интерфейс IDisposable
     {
         /// <summary>
         /// Создает классы, конструктор которых принимает параметры явно

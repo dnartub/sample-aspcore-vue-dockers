@@ -13,13 +13,14 @@ using Utils.Activators.Creators;
 
 namespace Web.Host.BLL.BusinessProcesses.LoadVacancies
 {
-    public class LoadVacanciesBP : IBusinessProcess<Guid, List<ISourceVacancy>>
+    public class LoadVacanciesBP : IBusinessProcess<Guid?, List<ISourceVacancy>>
     {
         [DiService]
         public IServiceProvider Provider { get; set; }
 
-        public async Task<List<ISourceVacancy>> RunAsync(Guid sourceId) => 
-            await BusinessLogicChain<List<ISourceVacancy>>
+        public async Task<List<ISourceVacancy>> RunAsync(Guid? sourceId)
+        {
+            var result = await BusinessLogicChain<List<ISourceVacancy>>
                         .New<GetSourceFromDb, Source>(sourceId)
                         .Then<LoadFromWebSource, SourceVacanciesModel>()
                             .OnException<HttpRequestException, Source, LoadFromDb>(source =>
@@ -29,5 +30,8 @@ namespace Web.Host.BLL.BusinessProcesses.LoadVacancies
                         .Then<SaveToDb, List<ISourceVacancy>>()
                         .RunAsync(Provider);
 
+            return result;
+        }
+            
     }
 }
