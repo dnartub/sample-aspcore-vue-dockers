@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
@@ -38,10 +39,24 @@ namespace Utils.Extensions.Reflection
             }
         }
 
+        public static async Task<object> InvokeMethodAsync<T>(this object instance, Expression<Func<T, string>> funcMethodName , object[] parameters)
+        {
+            var constExpr = funcMethodName.Body as ConstantExpression;
+            var methodName = constExpr.Value as string;
+            return await instance.InvokeMethodAsync(methodName, parameters);
+        }
+
         public static object FuncInvoke(this object funcInstance, params object[] args)
         {
             var result = (funcInstance as Delegate).DynamicInvoke(args);
             return result;
+        }
+
+        public static object GetPropertyValue(this object instance, string propertyName)
+        {
+            var property = instance.GetType().GetProperty(propertyName);
+            var value = property.GetValue(instance);
+            return value;
         }
     }
 }
