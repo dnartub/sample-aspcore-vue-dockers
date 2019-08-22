@@ -1,9 +1,8 @@
-﻿using Parsers.Source.Interfaces;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Parsers.Source.Implementations.Models
+namespace Common.Types
 {
     /// <summary>
     /// Модель данных вакансии

@@ -31,6 +31,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chains", "tests\Chains\Chai
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Blc", "common\Blc\Blc.csproj", "{63AC9773-1A38-49A3-878B-0CEAA038CC7D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common.Types", "common\Common.Types\Common.Types.csproj", "{07EE39D6-DF05-491D-A6A4-E34F5F0F38E3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -81,6 +83,10 @@ Global
 		{63AC9773-1A38-49A3-878B-0CEAA038CC7D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{63AC9773-1A38-49A3-878B-0CEAA038CC7D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{63AC9773-1A38-49A3-878B-0CEAA038CC7D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{07EE39D6-DF05-491D-A6A4-E34F5F0F38E3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{07EE39D6-DF05-491D-A6A4-E34F5F0F38E3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{07EE39D6-DF05-491D-A6A4-E34F5F0F38E3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{07EE39D6-DF05-491D-A6A4-E34F5F0F38E3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -94,6 +100,7 @@ Global
 		{0866C28B-0DEA-4CCD-A611-EB687F0F2CB8} = {14419A35-3CE5-4E49-97C6-8DDE4F6E06DB}
 		{5B44D223-FCC1-434C-9F47-7FAFD6DA06FA} = {0F65D8DD-1CAA-4161-A8F1-D7C37E35F934}
 		{63AC9773-1A38-49A3-878B-0CEAA038CC7D} = {14419A35-3CE5-4E49-97C6-8DDE4F6E06DB}
+		{07EE39D6-DF05-491D-A6A4-E34F5F0F38E3} = {14419A35-3CE5-4E49-97C6-8DDE4F6E06DB}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {F1A4A339-2D11-45DF-9CF8-F4CB59D1B270}

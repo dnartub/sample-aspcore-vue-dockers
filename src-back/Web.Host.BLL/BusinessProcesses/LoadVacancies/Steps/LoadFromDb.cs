@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using Utils.Activators.Creators;
 using Cqrs.Interfaces;
 using Web.Host.Cqrs.Queries.VacanciesFromDb;
+using Common.Types;
 
 namespace Web.Host.BLL.BusinessProcesses.LoadVacancies.Steps
 {

@@ -17,6 +17,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Web.Host.Service.Controllers.Base;
 using Web.Host.BLL.BusinessProcesses.LoadVacancies;
+using Common.Types;
 
 namespace Web.Host.Service.Controllers.Api.Vacancy
 {

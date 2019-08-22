@@ -1,4 +1,5 @@
-﻿using Cqrs.Interfaces;
+﻿using Common.Types;
+using Cqrs.Interfaces;
 using Parsers.Source.Interfaces;
 using System;
 using System.Collections.Generic;

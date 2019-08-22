@@ -1,4 +1,5 @@
-﻿using Parsers.Source.Interfaces;
+﻿using Common.Types;
+using Parsers.Source.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Text;

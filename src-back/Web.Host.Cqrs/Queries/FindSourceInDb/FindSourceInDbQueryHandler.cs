@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Web.Host.Cqrs.Queries.FindSourceInDb
 {
-    public class FindSourceInDbQueryHandler : IQueryHandler<FindSourceInDbQuery, Task<List<Models.Source>>>, IDisposable
+    public class FindSourceInDbQueryHandler : IQueryHandler<FindSourceInDbQuery, Task<List<Models.Source>>>
     {
         [DiService]
         public SvContext Context { get; set; }
@@ -24,11 +24,5 @@ namespace Web.Host.Cqrs.Queries.FindSourceInDb
             var dals = await Context.Sources.Where(query.Predicate).ToListAsync();
             return Mapper.Map<List<Models.Source>>(dals);
         }
-
-        public void Dispose()
-        {
-            ;
-        }
-
     }
 }

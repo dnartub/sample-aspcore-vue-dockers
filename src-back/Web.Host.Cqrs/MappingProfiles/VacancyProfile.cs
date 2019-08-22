@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Common.Types;
 using Parsers.Source.Implementations.Models;
 using System;
 using System.Collections.Generic;

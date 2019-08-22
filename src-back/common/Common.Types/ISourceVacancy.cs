@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Parsers.Source.Interfaces
+namespace Common.Types
 {
     /// <summary>
     /// Модель данных о вакансии

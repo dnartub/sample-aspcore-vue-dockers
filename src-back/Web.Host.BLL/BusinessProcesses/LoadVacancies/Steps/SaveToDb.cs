@@ -9,6 +9,7 @@ using Cqrs.Interfaces;
 using Web.Host.Cqrs.Models;
 using Web.Host.Cqrs.Commands.AddVacanciesToDb;
 using Web.Host.BLL.BusinessProcesses.LoadVacancies.Models;
+using Common.Types;
 
 namespace Web.Host.BLL.BusinessProcesses.LoadVacancies.Steps
 {

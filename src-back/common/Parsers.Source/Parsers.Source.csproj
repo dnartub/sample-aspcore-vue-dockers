@@ -10,8 +10,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Common.Types\Common.Types.csproj" />
     <ProjectReference Include="..\HttpRequest.Core\HttpRequest.Core.csproj" />
-    <ProjectReference Include="..\MsSqlDatabase\MsSqlDatabase.csproj" />
   </ItemGroup>
 
 </Project>

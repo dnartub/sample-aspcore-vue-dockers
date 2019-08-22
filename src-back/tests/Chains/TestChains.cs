@@ -6,7 +6,12 @@ using Xunit;
 
 namespace Chains
 {
-    public static class TestFailureProcessTrace
+    public class ProcessTrace
+    {
+        public static string TraceMessage = "";
+    }
+
+    public class DisposeTrace
     {
         public static string TraceMessage = "";
     }
@@ -16,8 +21,12 @@ namespace Chains
         [Fact]
         public async Task TestSimpleChain()
         {
+            DisposeTrace.TraceMessage = "";
+
             var result = await new BP().RunAsync("request");
+
             Assert.Equal("request -> Step1Result -> Step2Result -> Step3Result", result);
+            Assert.Equal("/Step1Disposed/Step3Disposed", DisposeTrace.TraceMessage);
         }
 
         [Fact]
@@ -30,21 +39,21 @@ namespace Chains
         [Fact]
         public async Task TestFailure()
         {
-            TestFailureProcessTrace.TraceMessage = "";
+            ProcessTrace.TraceMessage = "";
 
             await Assert.ThrowsAsync<TestException>(()=> new BP3().RunAsync("request"));
 
-            Assert.Equal("/Step1Done/Step2Done/Step3Done/Step4Fail/Step3Cancel/Step2Cancel/Step1Cancel", TestFailureProcessTrace.TraceMessage);
+            Assert.Equal("/Step1Done/Step2Done/Step3Done/Step4Fail/Step3Cancel/Step2Cancel/Step1Cancel", ProcessTrace.TraceMessage);
         }
 
         [Fact]
         public async Task TestFailureOnFailure()
         {
-            TestFailureProcessTrace.TraceMessage = "";
+            ProcessTrace.TraceMessage = "";
 
             await Assert.ThrowsAsync<TestException>(() => new BP4().RunAsync("request"));
 
-            Assert.Equal("/Step1Done/Step2Done/Step3Done/Step4Fail/Step5Done/Step6Fail/Step5Cancel/Step3Cancel/Step2Cancel/Step1Cancel", TestFailureProcessTrace.TraceMessage);
+            Assert.Equal("/Step1Done/Step2Done/Step3Done/Step4Fail/Step5Done/Step6Fail/Step5Cancel/Step3Cancel/Step2Cancel/Step1Cancel", ProcessTrace.TraceMessage);
         }
 
         [Fact]
@@ -62,7 +71,7 @@ namespace Chains
 
         #region == Test Data ==
 
-        public class Step1 : IBusinessProcessStep<string>
+        public class Step1 : IBusinessProcessStep<string>, IDisposable
         {
             string _request;
 
@@ -73,14 +82,19 @@ namespace Chains
 
             public async Task CancelAsync()
             {
-                TestFailureProcessTrace.TraceMessage += "/Step1Cancel";
+                ProcessTrace.TraceMessage += "/Step1Cancel";
                 await Task.CompletedTask;
             }
 
             public async Task<string> RunAsync()
             {
-                TestFailureProcessTrace.TraceMessage += "/Step1Done";
+                ProcessTrace.TraceMessage += "/Step1Done";
                 return await Task.FromResult($"{_request} -> Step1Result");
+            }
+
+            public void Dispose()
+            {
+                DisposeTrace.TraceMessage += "/Step1Disposed";
             }
         }
 
@@ -96,18 +110,18 @@ namespace Chains
 
             public async Task CancelAsync()
             {
-                TestFailureProcessTrace.TraceMessage += "/Step2Cancel";
+                ProcessTrace.TraceMessage += "/Step2Cancel";
                 await Task.CompletedTask;
             }
 
             public async Task<string> RunAsync()
             {
-                TestFailureProcessTrace.TraceMessage += "/Step2Done";
+                ProcessTrace.TraceMessage += "/Step2Done";
                 return await Task.FromResult($"{_request} -> Step2Result");
             }
         }
 
-        public class Step3 : IBusinessProcessStep<string>
+        public class Step3 : IBusinessProcessStep<string>, IDisposable
         {
             string _request;
 
@@ -118,14 +132,19 @@ namespace Chains
 
             public async Task CancelAsync()
             {
-                TestFailureProcessTrace.TraceMessage += "/Step3Cancel";
+                ProcessTrace.TraceMessage += "/Step3Cancel";
                 await Task.CompletedTask;
             }
 
             public async Task<string> RunAsync()
             {
-                TestFailureProcessTrace.TraceMessage += "/Step3Done";
+                ProcessTrace.TraceMessage += "/Step3Done";
                 return await Task.FromResult($"{_request} -> Step3Result");
+            }
+
+            public void Dispose()
+            {
+                DisposeTrace.TraceMessage += "/Step3Disposed";
             }
         }
 
@@ -145,13 +164,13 @@ namespace Chains
 
             public async Task CancelAsync()
             {
-                TestFailureProcessTrace.TraceMessage += "/Step4Cancel";
+                ProcessTrace.TraceMessage += "/Step4Cancel";
                 await Task.CompletedTask;
             }
 
             public async Task<string> RunAsync()
             {
-                TestFailureProcessTrace.TraceMessage += "/Step4Fail";
+                ProcessTrace.TraceMessage += "/Step4Fail";
                 await Task.CompletedTask;
                 throw new TestException("Step4 fail");
             }
@@ -168,13 +187,13 @@ namespace Chains
 
             public async Task CancelAsync()
             {
-                TestFailureProcessTrace.TraceMessage += "/Step5Cancel";
+                ProcessTrace.TraceMessage += "/Step5Cancel";
                 await Task.CompletedTask;
             }
 
             public async Task<string> RunAsync()
             {
-                TestFailureProcessTrace.TraceMessage += "/Step5Done";
+                ProcessTrace.TraceMessage += "/Step5Done";
                 return await Task.FromResult($"{_request} -> Step5Result");
             }
         }
@@ -190,13 +209,13 @@ namespace Chains
 
             public async Task CancelAsync()
             {
-                TestFailureProcessTrace.TraceMessage += "/Step6Cancel";
+                ProcessTrace.TraceMessage += "/Step6Cancel";
                 await Task.CompletedTask;
             }
 
             public async Task<string> RunAsync()
             {
-                TestFailureProcessTrace.TraceMessage += "/Step6Fail";
+                ProcessTrace.TraceMessage += "/Step6Fail";
                 await Task.CompletedTask;
                 throw new TestException("Step6 fail");
             }
@@ -226,13 +245,13 @@ namespace Chains
 
             public async Task CancelAsync()
             {
-                TestFailureProcessTrace.TraceMessage += "/StepSwitcherCancel";
+                ProcessTrace.TraceMessage += "/StepSwitcherCancel";
                 await Task.CompletedTask;
             }
 
             public async Task<SwitcherModel> RunAsync()
             {
-                TestFailureProcessTrace.TraceMessage += "/StepSwitcherDone";
+                ProcessTrace.TraceMessage += "/StepSwitcherDone";
                 var result = Switcher.NoSwitch;
 
                 if (_request.StartsWith("request1"))
@@ -263,13 +282,13 @@ namespace Chains
 
             public async Task CancelAsync()
             {
-                TestFailureProcessTrace.TraceMessage += "/Step2_Switch1Cancel";
+                ProcessTrace.TraceMessage += "/Step2_Switch1Cancel";
                 await Task.CompletedTask;
             }
 
             public async Task<string> RunAsync()
             {
-                TestFailureProcessTrace.TraceMessage += "/Step2_Switch1Done";
+                ProcessTrace.TraceMessage += "/Step2_Switch1Done";
                 return await Task.FromResult($"{_request.Request} -> Step2_Switch1Result");
             }
         }
@@ -285,13 +304,13 @@ namespace Chains
 
             public async Task CancelAsync()
             {
-                TestFailureProcessTrace.TraceMessage += "/Step2_Switch2Cancel";
+                ProcessTrace.TraceMessage += "/Step2_Switch2Cancel";
                 await Task.CompletedTask;
             }
 
             public async Task<string> RunAsync()
             {
-                TestFailureProcessTrace.TraceMessage += "/Step2_Switch2Done";
+                ProcessTrace.TraceMessage += "/Step2_Switch2Done";
                 return await Task.FromResult($"{_request.Request} -> Step2_Switch2Result");
             }
         }
@@ -307,13 +326,13 @@ namespace Chains
 
             public async Task CancelAsync()
             {
-                TestFailureProcessTrace.TraceMessage += "/Step2_NoSwitchCancel";
+                ProcessTrace.TraceMessage += "/Step2_NoSwitchCancel";
                 await Task.CompletedTask;
             }
 
             public async Task<string> RunAsync()
             {
-                TestFailureProcessTrace.TraceMessage += "/Step2_NoSwitchDone";
+                ProcessTrace.TraceMessage += "/Step2_NoSwitchDone";
                 return await Task.FromResult($"{_request.Request} -> Step2_NoSwitchResult");
             }
         }

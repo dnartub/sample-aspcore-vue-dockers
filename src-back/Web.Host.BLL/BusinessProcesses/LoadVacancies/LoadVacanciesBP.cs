@@ -10,6 +10,7 @@ using Blc.ChainBuilder;
 using System.Threading.Tasks;
 using Web.Host.BLL.BusinessProcesses.LoadVacancies.Models;
 using Utils.Activators.Creators;
+using Common.Types;
 
 namespace Web.Host.BLL.BusinessProcesses.LoadVacancies
 {

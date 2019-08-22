@@ -12,7 +12,7 @@ using Web.Host.Cqrs.Queries.SourceFromDb;
 
 namespace Web.Host.BLL.BusinessProcesses.LoadVacancies.Steps
 {
-    public class GetSourceFromDb : IBusinessProcessStep<Source>, IDisposable
+    public class GetSourceFromDb : IBusinessProcessStep<Source>
     {
         [DiService]
         public ICqrsService CqrsService { get; set; }
@@ -46,7 +46,7 @@ namespace Web.Host.BLL.BusinessProcesses.LoadVacancies.Steps
         {
             var query = new FindSourceInDbQuery()
             {
-                Predicate = x => x.SourceParser == MsSqlDatabase.Enums.SourceParsers.RabotaRu
+                Predicate = x => x.SourceParser == Common.Types.SourceParsers.RabotaRu
             };
             var source = (await CqrsService.GetResult(query))
                 .FirstOrDefault();
@@ -69,12 +69,5 @@ namespace Web.Host.BLL.BusinessProcesses.LoadVacancies.Steps
 
             return source;
         }
-
-
-        public void Dispose()
-        {
-            ;
-        }
-
     }
 }

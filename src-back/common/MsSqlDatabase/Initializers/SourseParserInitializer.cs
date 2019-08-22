@@ -1,4 +1,5 @@
-﻿using MsSqlDatabase.Context;
+﻿using Common.Types;
+using MsSqlDatabase.Context;
 using MsSqlDatabase.Entities;
 using System;
 using System.Collections.Generic;
@@ -24,7 +25,7 @@ namespace MsSqlDatabase.Initializers
         /// </summary>
         public void Execute()
         {
-            var existed = SvContext.Sources.Where(x => x.SourceParser == Enums.SourceParsers.RabotaYandex).FirstOrDefault();
+            var existed = SvContext.Sources.Where(x => x.SourceParser == SourceParsers.RabotaYandex).FirstOrDefault();
             if (existed != null)
             {
                 return;
@@ -33,7 +34,7 @@ namespace MsSqlDatabase.Initializers
             var source = new Source()
             {
                 Id = Guid.Parse("e6c17a32-4e91-4b18-815b-5a33268834e4"),
-                SourceParser = Enums.SourceParsers.RabotaYandex,
+                SourceParser = SourceParsers.RabotaYandex,
                 Url = "https://rabota.yandex.ru/search?job_industry=275"
             };
 
@@ -42,7 +43,7 @@ namespace MsSqlDatabase.Initializers
             var source2 = new Source()
             {
                 Id = Guid.Parse("55619064-c2ac-4d6d-bf18-fa3107196515"),
-                SourceParser = Enums.SourceParsers.RabotaRu,
+                SourceParser = SourceParsers.RabotaRu,
                 Url = "https://kaluga.rabota.ru/vacancy"
             };
 

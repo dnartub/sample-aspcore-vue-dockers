@@ -1,4 +1,4 @@
-﻿namespace MsSqlDatabase.Enums
+﻿namespace Common.Types
 {
     // TODO: должен быть в общих типах между всеми проектами
     /// <summary>

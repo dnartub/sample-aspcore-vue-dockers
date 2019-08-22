@@ -34,7 +34,7 @@ namespace Blc.ChainBuilder
         // реакция на предыдущие результаты: результат(Func<TPreviosStepResult,bool>) - цепочка действий(Func)
         private Dictionary<Func<TCurrentStepResult, bool>, Delegate> OnResults { get; set; } = new Dictionary<Func<TCurrentStepResult, bool>, Delegate>();
         // экземпляр реализации IBusinessProcessStep  - создается при выполнении текущего шага BusinessLogicChainStep
-        private TCurrentStep CurrentBusinessProcessStep { get; set; } 
+        private object PreviosResult { get; set; } 
 
         /// <summary>
         /// создание экзепляра на действие Then
@@ -148,8 +148,7 @@ namespace Blc.ChainBuilder
                     executedSteps.Reverse();
                     foreach (var cancelStep in executedSteps)
                     {
-                        //await cancelStep.InvokeMethodAsync("Cancel", null);
-                        await cancelStep.CancelBusinessProcessStep();
+                        await cancelStep.CancelBusinessProcessStep(provider);
                     }
 
                     throw ex;
@@ -190,25 +189,40 @@ namespace Blc.ChainBuilder
             }
         }
 
-        async Task<object> IBusinessLogicChainStepInvoker.RunBusinessProcessStep(IServiceProvider provider, object previosResult)
+        private TCurrentStep CreateCurrentBusinessProcessStep(InstanceCreator instanceCreator, IServiceProvider provider, object previosResult)
         {
-            CurrentBusinessProcessStep = provider == null
-                    ? InstanceCreator
-                        .Use<ClassicCreator>(new object[] { previosResult })
-                        .Create<TCurrentStep>()
-                    : InstanceCreator
-                        .Use<ServiceProviderPropertyCreator>(provider, new object[] { previosResult })
-                        .Create<TCurrentStep>();
-
-            var result = await CurrentBusinessProcessStep.RunAsync();
-            return result;
+            var currentBusinessProcessStep = provider == null
+                       ? instanceCreator
+                           .Create<ClassicCreator, TCurrentStep>(new object[] { previosResult })
+                       : instanceCreator
+                           .Create<ServiceProviderPropertyCreator, TCurrentStep>(provider, new object[] { previosResult });
+            return currentBusinessProcessStep;
         }
 
-        async Task IBusinessLogicChainStepInvoker.CancelBusinessProcessStep()
+        async Task<object> IBusinessLogicChainStepInvoker.RunBusinessProcessStep(IServiceProvider provider, object previosResult)
         {
-            if (CurrentBusinessProcessStep != null)
+            using (var instanceCreator = InstanceCreator.GetContext())
             {
-                await CurrentBusinessProcessStep.CancelAsync();
+                var result = await CreateCurrentBusinessProcessStep(instanceCreator, provider, previosResult)
+                    .RunAsync();
+
+                PreviosResult = previosResult;
+
+                return result;
+            }
+        }
+
+        async Task IBusinessLogicChainStepInvoker.CancelBusinessProcessStep(IServiceProvider provider)
+        {
+            if (PreviosResult == null)
+            {
+                return;
+            }
+
+            using (var instanceCreator = InstanceCreator.GetContext())
+            {
+                await CreateCurrentBusinessProcessStep(instanceCreator, provider, PreviosResult)
+                    .CancelAsync();
             }
         }
 

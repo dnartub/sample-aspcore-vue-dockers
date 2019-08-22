@@ -1,5 +1,5 @@
 ﻿using CsQuery;
-using MsSqlDatabase.Enums;
+using Common.Types;
 using Parsers.Source.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -12,9 +12,9 @@ namespace Parsers.Source.Implementations.SourceParsers
     /// </summary>
     public class RabotaYandexSourceParser : ISourceParser
     {
-        public bool IsSuitable(MsSqlDatabase.Enums.SourceParsers sourceParser)
+        public bool IsSuitable(Common.Types.SourceParsers sourceParser)
         {
-            return sourceParser == MsSqlDatabase.Enums.SourceParsers.RabotaYandex;
+            return sourceParser == Common.Types.SourceParsers.RabotaYandex;
         }
 
         public List<ISourceVacancy> Parse(string htmlText)

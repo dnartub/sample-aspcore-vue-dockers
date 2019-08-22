@@ -1,4 +1,4 @@
-﻿using MsSqlDatabase.Enums;
+﻿using Common.Types;
 using System;
 using System.Collections.Generic;
 using System.Text;

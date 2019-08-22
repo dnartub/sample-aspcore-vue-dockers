@@ -10,7 +10,7 @@ namespace Blc.ChainBuilder
         IBusinessLogicChainStepInvoker PreviosBusinessLogicChainStep { get; set; }
 
         Task<object> RunBusinessProcessStep(IServiceProvider provider, object previosResult);
-        Task CancelBusinessProcessStep();
+        Task CancelBusinessProcessStep(IServiceProvider provider);
 
         Task<object> RunBusinessLogicChainOnException(Exception cathcedException, object previosResult, IServiceProvider provider);
         Task<object> RunBusinessLogicChainOnResult(object previosResult, IServiceProvider provider);

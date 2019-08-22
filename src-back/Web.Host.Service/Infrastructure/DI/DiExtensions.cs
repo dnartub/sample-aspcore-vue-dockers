@@ -186,24 +186,6 @@ namespace Web.Host.Service.Infrastructure.DI
             return services;
         }
 
-        /// <summary>
-        /// Добавление инфраструктуры CQRS
-        /// </summary>
-        /// <param name="services"></param>
-        /// <returns></returns>
-        public static IServiceCollection AddCqrsServices(this IServiceCollection services)
-        {
-            // все соответствия действий и обработчиков (поддключаеммая сборка определяется типом из этой сборки)
-            // CommandClass:ICommand -> CommandHandlerClass:ICommandHandler<CommandClass>
-            services.AddSingleton<ICqrsDictionaryService, CqrsDictionaryService>(sp => new CqrsDictionaryService(new Type[] {
-                typeof(Web.Host.Cqrs.AssemblyLinks.CqrsAssemblyLink)
-            }));
-
-            // фабрика выдачи обработчика для команды/запроса
-            // выполнение команды/запроса
-            services.AddScoped<ICqrsService, CqrsService>();
-
-            return services;
-        }
+        
     }
 }

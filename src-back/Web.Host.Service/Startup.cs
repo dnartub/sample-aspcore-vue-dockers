@@ -10,8 +10,7 @@ using System.Threading.Tasks;
 using System.Linq;
 using Microsoft.AspNetCore.HttpOverrides;
 using Web.Host.Service.Infrastructure.DI;
-
-
+using Cqrs.Services;
 
 namespace Web.Host.Service
 {
@@ -35,7 +34,9 @@ namespace Web.Host.Service
                 .AddSourceParsers()
                 .AddWebSourceLoader()
                 .AddAutomapperConfiguration()
-                .AddCqrsServices()
+                .AddCqrsServices(new Type[] {
+                        typeof(Web.Host.Cqrs.AssemblyLinks.CqrsAssemblyLink)
+                })
                 .AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }
 

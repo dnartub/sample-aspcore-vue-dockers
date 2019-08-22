@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Common.Types;
 using Cqrs.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using MsSqlDatabase.Context;

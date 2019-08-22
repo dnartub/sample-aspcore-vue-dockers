@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using Utils.Activators.Creators;
 using System.Threading.Tasks;
+using Common.Types;
 
 namespace Web.Host.Cqrs.Queries.VacanciesFromWebSource
 {

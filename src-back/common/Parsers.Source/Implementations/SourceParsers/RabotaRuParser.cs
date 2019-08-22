@@ -1,5 +1,5 @@
 ﻿using CsQuery;
-using MsSqlDatabase.Enums;
+using Common.Types;
 using Parsers.Source.Implementations.Models;
 using Parsers.Source.Interfaces;
 using System;
@@ -16,9 +16,9 @@ namespace Parsers.Source.Implementations.SourceParsers
     {
         private const string hostUrl = "https://www.rabota.ru";
 
-        public bool IsSuitable(MsSqlDatabase.Enums.SourceParsers sourceParser)
+        public bool IsSuitable(Common.Types.SourceParsers sourceParser)
         {
-            return sourceParser == MsSqlDatabase.Enums.SourceParsers.RabotaRu;
+            return sourceParser == Common.Types.SourceParsers.RabotaRu;
         }
 
         public List<ISourceVacancy> Parse(string htmlText)

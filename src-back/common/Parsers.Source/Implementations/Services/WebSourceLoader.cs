@@ -1,4 +1,5 @@
-﻿using HtmlAgilityPack;
+﻿using Common.Types;
+using HtmlAgilityPack;
 using HttpRequest.Core;
 using Parsers.Source.Interfaces;
 using System;

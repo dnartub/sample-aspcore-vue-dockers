@@ -10,15 +10,19 @@ using Utils.Activators.Creators;
 
 namespace Cqrs.Services
 {
-    public class CqrsService : ICqrsService
+    public class CqrsService : ICqrsService, IDisposable
     {
         private ICqrsDictionaryService CqrsDictionaryService { get; set; }
         private IServiceProvider Provider { get; set; }
+
+        InstanceCreator _instanceCreator;
 
         public CqrsService(ICqrsDictionaryService cqrsDictionaryService, IServiceProvider provider)
         {
             CqrsDictionaryService = cqrsDictionaryService;
             Provider = provider;
+
+            _instanceCreator = InstanceCreator.GetContext();
         }
 
         public async Task Execute<TCommand>(TCommand command) where TCommand : ICommand
@@ -82,9 +86,12 @@ namespace Cqrs.Services
         /// <returns></returns>
         private object CreateHandlerInstance(Type handlerType)
         {
-            return InstanceCreator
-                .Use<ServiceProviderPropertyCreator>(Provider)
-                .Create(handlerType);
+            return _instanceCreator.Create<ServiceProviderPropertyCreator>(Provider, handlerType);
+        }
+
+        public void Dispose()
+        {
+            _instanceCreator.Dispose();
         }
     }
 }
