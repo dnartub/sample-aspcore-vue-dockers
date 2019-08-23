@@ -221,8 +221,11 @@ namespace Blc.ChainBuilder
 
             using (var instanceCreator = InstanceCreator.GetContext())
             {
-                await CreateCurrentBusinessProcessStep(instanceCreator, provider, PreviosResult)
-                    .CancelAsync();
+                var сancelableStep = CreateCurrentBusinessProcessStep(instanceCreator, provider, PreviosResult) as IBusinessProcessStepCancelable;
+                if (сancelableStep != null)
+                {
+                    await сancelableStep.CancelAsync();
+                }
             }
         }
 

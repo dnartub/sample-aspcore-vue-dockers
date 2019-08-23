@@ -13,7 +13,7 @@ using Common.Types;
 
 namespace Web.Host.BLL.BusinessProcesses.LoadVacancies.Steps
 {
-    public class SaveToDb : IBusinessProcessStep<List<ISourceVacancy>>
+    public class SaveToDb : IBusinessProcessStep<List<ISourceVacancy>>, IBusinessProcessStepCancelable
     {
         [DiService]
         public ICqrsService CqrsService { get; set; }
@@ -27,20 +27,27 @@ namespace Web.Host.BLL.BusinessProcesses.LoadVacancies.Steps
 
         public async Task CancelAsync()
         {
-            await Task.CompletedTask;
+            var commandAddVacanciesToDb = GetCommand();
+
+            await CqrsService.Down(commandAddVacanciesToDb);
         }
 
         public async Task<List<ISourceVacancy>> RunAsync()
         {
-            var commandAddVacanciesToDb = new AddVacanciesToDbCommand()
-            {
-                SourceId = _sourceVacancies.Source.Id,
-                Vacancies = _sourceVacancies.Vacancies
-            };
+            var commandAddVacanciesToDb = GetCommand();
 
             await CqrsService.Execute(commandAddVacanciesToDb);
 
             return _sourceVacancies.Vacancies;
+        }
+
+        private AddVacanciesToDbCommand GetCommand()
+        {
+            return new AddVacanciesToDbCommand()
+            {
+                SourceId = _sourceVacancies.Source.Id,
+                Vacancies = _sourceVacancies.Vacancies
+            };
         }
     }
 }

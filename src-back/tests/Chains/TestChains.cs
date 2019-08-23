@@ -53,7 +53,7 @@ namespace Chains
 
             await Assert.ThrowsAsync<TestException>(() => new BP4().RunAsync("request"));
 
-            Assert.Equal("/Step1Done/Step2Done/Step3Done/Step4Fail/Step5Done/Step6Fail/Step5Cancel/Step3Cancel/Step2Cancel/Step1Cancel", ProcessTrace.TraceMessage);
+            Assert.Equal("/Step1Done/Step2Done/Step3Done/Step4Fail/Step5Done/Step6Fail/Step3Cancel/Step2Cancel/Step1Cancel", ProcessTrace.TraceMessage);
         }
 
         [Fact]
@@ -71,7 +71,7 @@ namespace Chains
 
         #region == Test Data ==
 
-        public class Step1 : IBusinessProcessStep<string>, IDisposable
+        public class Step1 : IBusinessProcessStep<string>,  IBusinessProcessStepCancelable, IDisposable
         {
             string _request;
 
@@ -99,7 +99,7 @@ namespace Chains
         }
 
 
-        public class Step2 : IBusinessProcessStep<string>
+        public class Step2 : IBusinessProcessStep<string>, IBusinessProcessStepCancelable
         {
             string _request;
 
@@ -121,7 +121,7 @@ namespace Chains
             }
         }
 
-        public class Step3 : IBusinessProcessStep<string>, IDisposable
+        public class Step3 : IBusinessProcessStep<string>, IBusinessProcessStepCancelable, IDisposable
         {
             string _request;
 
@@ -153,7 +153,7 @@ namespace Chains
             public TestException(string msg) : base(msg) { }
         }
 
-        public class Step4 : IBusinessProcessStep<string>
+        public class Step4 : IBusinessProcessStep<string>, IBusinessProcessStepCancelable
         {
             string _request;
 
@@ -185,12 +185,6 @@ namespace Chains
                 _request = request;
             }
 
-            public async Task CancelAsync()
-            {
-                ProcessTrace.TraceMessage += "/Step5Cancel";
-                await Task.CompletedTask;
-            }
-
             public async Task<string> RunAsync()
             {
                 ProcessTrace.TraceMessage += "/Step5Done";
@@ -198,7 +192,7 @@ namespace Chains
             }
         }
 
-        public class Step6 : IBusinessProcessStep<string>
+        public class Step6 : IBusinessProcessStep<string>, IBusinessProcessStepCancelable
         {
             string _request;
 
@@ -271,7 +265,7 @@ namespace Chains
             }
         }
 
-        public class Step2_Switch1 : IBusinessProcessStep<string>
+        public class Step2_Switch1 : IBusinessProcessStep<string>, IBusinessProcessStepCancelable
         {
             SwitcherModel _request;
 
@@ -293,7 +287,7 @@ namespace Chains
             }
         }
 
-        public class Step2_Switch2 : IBusinessProcessStep<string>
+        public class Step2_Switch2 : IBusinessProcessStep<string>, IBusinessProcessStepCancelable
         {
             SwitcherModel _request;
 
@@ -315,7 +309,7 @@ namespace Chains
             }
         }
 
-        public class Step2_NoSwitch : IBusinessProcessStep<string>
+        public class Step2_NoSwitch : IBusinessProcessStep<string>, IBusinessProcessStepCancelable
         {
             SwitcherModel _request;
 

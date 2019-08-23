@@ -24,12 +24,6 @@ namespace Web.Host.BLL.BusinessProcesses.LoadVacancies.Steps
             _sourceId = sourceId;
         }
 
-
-        public async Task CancelAsync()
-        {
-            await Task.CompletedTask;
-        }
-
         public async Task<Source> RunAsync()
         {
             if (_sourceId.HasValue)

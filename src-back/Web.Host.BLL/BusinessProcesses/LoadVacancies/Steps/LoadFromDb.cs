@@ -24,11 +24,6 @@ namespace Web.Host.BLL.BusinessProcesses.LoadVacancies.Steps
             _source = source;
         }
 
-        public async Task CancelAsync()
-        {
-            await Task.CompletedTask;
-        }
-
         public async Task<List<ISourceVacancy>> RunAsync()
         {
             var queryGetVacanciesFromDb = new VacanciesFromDbQuery()
