@@ -2,6 +2,7 @@ version: '3.4'
 
 services:
   web.host.service:
+    container_name: a1-webhost
     image: ${DOCKER_REGISTRY-}webhostservice
     build:
       context: ./../Web.Host.Service/
@@ -11,14 +12,35 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=http://+:5000
+    links:
+      - log.service
+    networks:
+      - a1
   proxy.front:
+    container_name: a1-proxy
     image: ${DOCKER_REGISTRY-}proxy.front
     build:
       context: ./../../src-front/
       dockerfile: Dev.Dockerfile
     volumes:
       - ./nginx.conf:/etc/nginx/nginx.conf
+      - ./auth.htpasswd:/etc/nginx/auth.htpasswd
     ports:
       - "8088:80"
     links:
-      - web.host.service
+      - log.service
+    networks:
+      - a1
+  log.service:
+    container_name: a1-seq
+    image: "datalust/seq:5"
+    ports:
+      - "5342:80"
+    environment:
+      - ACCEPT_EULA=Y
+    networks:
+      - a1
+
+networks:
+  a1:
+    driver: "bridge"

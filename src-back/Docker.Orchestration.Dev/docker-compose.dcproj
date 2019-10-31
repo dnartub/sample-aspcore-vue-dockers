@@ -7,11 +7,12 @@
   </PropertyGroup>
   <PropertyGroup>
     <DockerLaunchAction>LaunchBrowser</DockerLaunchAction>
-	<DockerLaunchBrowser>True</DockerLaunchBrowser>
+    <DockerLaunchBrowser>True</DockerLaunchBrowser>
     <DockerServiceUrl>http://{ServiceIPAddress}:{ServicePort}</DockerServiceUrl>
-	<DockerServiceName>proxy.front</DockerServiceName>
+    <DockerServiceName>proxy.front</DockerServiceName>
   </PropertyGroup>
   <ItemGroup>
+    <None Include="auth.htpasswd" />
     <None Include="docker-compose.override.yml">
       <DependentUpon>docker-compose.yml</DependentUpon>
     </None>

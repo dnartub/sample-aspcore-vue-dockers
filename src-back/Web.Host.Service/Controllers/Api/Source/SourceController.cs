@@ -8,6 +8,7 @@ using Serilog;
 using System.Threading.Tasks;
 using Cqrs.Interfaces;
 using Web.Host.Cqrs.Queries.AllSourcesFromDb;
+using System.Net;
 
 namespace Web.Host.Service.Controllers.Api.Source
 {
@@ -39,6 +40,8 @@ namespace Web.Host.Service.Controllers.Api.Source
             {
                 var result = await _cqrsService.GetResult(new AllSourcesFromDbQuery());
 
+                Log.Information("Список всех источников {@result}", result);
+
                 return base.SuccessResult(result);
             }
             catch (Exception ex)
@@ -47,5 +50,6 @@ namespace Web.Host.Service.Controllers.Api.Source
                 return base.ErrorResult($"Ошибка при получении списка источников: {ex.Message}");
             }
         }
+
     }
 }
