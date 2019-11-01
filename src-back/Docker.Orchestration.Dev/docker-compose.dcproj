@@ -19,5 +19,6 @@
     <None Include="docker-compose.yml" />
     <None Include=".dockerignore" />
     <None Include="nginx.conf" />
+    <None Include="wait_elk.sh" />
   </ItemGroup>
 </Project>
