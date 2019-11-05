@@ -11,6 +11,8 @@ using System.Linq;
 using Microsoft.AspNetCore.HttpOverrides;
 using Web.Host.Service.Infrastructure.DI;
 using Cqrs.Services;
+using AppMetrics.Filters;
+using AppMetrics.Di;
 
 namespace Web.Host.Service
 {
@@ -37,7 +39,12 @@ namespace Web.Host.Service
                 .AddCqrsServices(new Type[] {
                         typeof(Web.Host.Cqrs.AssemblyLinks.CqrsAssemblyLink)
                 })
-                .AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+                .AddMetricsBeat(Configuration)
+                .AddMvc(options=> {
+                    options.Filters.Add(typeof(GlobalActionFilter));
+                })
+                .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)

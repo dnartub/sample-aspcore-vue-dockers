@@ -32,6 +32,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\AppMetrics\AppMetrics.csproj" />
     <ProjectReference Include="..\common\Cqrs\Cqrs.csproj" />
     <ProjectReference Include="..\common\HttpRequest.Core\HttpRequest.Core.csproj" />
     <ProjectReference Include="..\common\MsSqlDatabase\MsSqlDatabase.csproj" />

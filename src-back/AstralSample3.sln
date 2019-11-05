@@ -19,19 +19,21 @@ Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "Docker.Or
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Docker.Orchestration.Dev", "Docker.Orchestration.Dev", "{A79A2901-9F5E-407B-BA19-A8242B732537}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Web.Host.Cqrs", "Web.Host.Cqrs\Web.Host.Cqrs.csproj", "{7FEF0BF1-C4A9-47E3-BFC9-C0B1EBE85777}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Web.Host.Cqrs", "Web.Host.Cqrs\Web.Host.Cqrs.csproj", "{7FEF0BF1-C4A9-47E3-BFC9-C0B1EBE85777}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Utils", "common\Utils\Utils.csproj", "{0866C28B-0DEA-4CCD-A611-EB687F0F2CB8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utils", "common\Utils\Utils.csproj", "{0866C28B-0DEA-4CCD-A611-EB687F0F2CB8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Web.Host.BLL", "Web.Host.BLL\Web.Host.BLL.csproj", "{D55A7579-0351-4C51-8077-903F01F214B6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Web.Host.BLL", "Web.Host.BLL\Web.Host.BLL.csproj", "{D55A7579-0351-4C51-8077-903F01F214B6}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{0F65D8DD-1CAA-4161-A8F1-D7C37E35F934}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chains", "tests\Chains\Chains.csproj", "{5B44D223-FCC1-434C-9F47-7FAFD6DA06FA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Chains", "tests\Chains\Chains.csproj", "{5B44D223-FCC1-434C-9F47-7FAFD6DA06FA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Blc", "common\Blc\Blc.csproj", "{63AC9773-1A38-49A3-878B-0CEAA038CC7D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Blc", "common\Blc\Blc.csproj", "{63AC9773-1A38-49A3-878B-0CEAA038CC7D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common.Types", "common\Common.Types\Common.Types.csproj", "{07EE39D6-DF05-491D-A6A4-E34F5F0F38E3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Common.Types", "common\Common.Types\Common.Types.csproj", "{07EE39D6-DF05-491D-A6A4-E34F5F0F38E3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AppMetrics", "AppMetrics\AppMetrics.csproj", "{979BE07C-948A-4E61-AE52-EA73211D4B1B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -87,6 +89,10 @@ Global
 		{07EE39D6-DF05-491D-A6A4-E34F5F0F38E3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{07EE39D6-DF05-491D-A6A4-E34F5F0F38E3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{07EE39D6-DF05-491D-A6A4-E34F5F0F38E3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{979BE07C-948A-4E61-AE52-EA73211D4B1B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{979BE07C-948A-4E61-AE52-EA73211D4B1B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{979BE07C-948A-4E61-AE52-EA73211D4B1B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{979BE07C-948A-4E61-AE52-EA73211D4B1B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -101,6 +107,7 @@ Global
 		{5B44D223-FCC1-434C-9F47-7FAFD6DA06FA} = {0F65D8DD-1CAA-4161-A8F1-D7C37E35F934}
 		{63AC9773-1A38-49A3-878B-0CEAA038CC7D} = {14419A35-3CE5-4E49-97C6-8DDE4F6E06DB}
 		{07EE39D6-DF05-491D-A6A4-E34F5F0F38E3} = {14419A35-3CE5-4E49-97C6-8DDE4F6E06DB}
+		{979BE07C-948A-4E61-AE52-EA73211D4B1B} = {14419A35-3CE5-4E49-97C6-8DDE4F6E06DB}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {F1A4A339-2D11-45DF-9CF8-F4CB59D1B270}
